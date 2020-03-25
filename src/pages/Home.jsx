@@ -1,34 +1,20 @@
 import React, { Fragment } from 'react';
 import { KeyBoardManagar } from '@HOC';
 
-import { Instruction, Header, Game, Details } from '@Components';
+import { Header, Game } from '@Components';
 import { Container, Wave, GameFactoryConsumer } from '@Elements';
 
-import Waves from '@Image/waves.gif';
-
+export let n = 4;
 const Home = ({ eventType }) => {
   return (
-    <Container>
+    <Container n={n}>
       <GameFactoryConsumer>
         {({ values, methods }) => {
           return (
             <Fragment>
-              <Header />
               <br />
-              <Game eventType={eventType} {...values} {...methods} />
+              <Game n={n} eventType={eventType} {...values} {...methods} />
               <br />
-              <Instruction />
-              <div>
-                <Wave className="waves" src={Waves} alt="" />
-              </div>
-              <br />
-              <Details
-                name={'Shubham Singh'}
-                githubURL={'https://github.com/imshubhamsingh'}
-                projectURL={'https://github.com/imshubhamsingh/15-puzzle'}
-                linkedinURL={'https://linkedin.com/in/imshubhamsingh97/'}
-                twitterURL={'https://twitter.com/imshubhamsingh_'}
-              />
             </Fragment>
           );
         }}

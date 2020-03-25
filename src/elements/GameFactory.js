@@ -8,11 +8,11 @@ import {
   checkArray,
   gameState
 } from '@Utils';
+import {n} from "../pages/Home";
 
 const NEW_GAME = '__new_game__';
 const RESET_GAME = '__reset_game__';
-
-// [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+const nn1 = () => n * n - 1;
 const genrateArray = (num, add) => {
   let puzzle = [...Array(num)].map((_, i) => i + add);
   puzzle.push(0);
@@ -20,11 +20,11 @@ const genrateArray = (num, add) => {
 };
 
 const ValuesContext = createContext({});
-const SetValueContext = createContext(() => {});
+const SetValueContext = createContext(() => { });
 
 const isSolvable = puzzle => {
   let parity = 0;
-  let gridWidth = 4;
+  let gridWidth = n;
   let row = 0;
   let blankRow = 0;
   for (let i = 0; i < puzzle.length; i++) {
@@ -59,7 +59,7 @@ const genratePuzzle = (arr, event) => {
     if (isSolvable(arr)) {
       return arr;
     } else {
-      return genratePuzzle(shuffle(genrateArray(15, 1)), NEW_GAME);
+      return genratePuzzle(shuffle(genrateArray(nn1(), 1)), NEW_GAME);
     }
   } else {
     return arr;
@@ -70,8 +70,8 @@ class GameFactory extends Component {
   defaultState = (_event, num) => ({
     numbers:
       _event === NEW_GAME
-        ? genratePuzzle(shuffle(genrateArray(15, num)), _event)
-        : shuffle(genrateArray(15, num)),
+        ? genratePuzzle(shuffle(genrateArray(nn1(), num)), _event)
+        : shuffle(genrateArray(nn1(), num)),
     moves: 0,
     seconds: 0,
     gameState: gameState.GAME_IDLE
@@ -93,8 +93,8 @@ class GameFactory extends Component {
 
   gettingEmptyBoxLocation = () => {
     let location = this.state.numbers.indexOf(0);
-    let column = Math.floor(location % 4);
-    let row = Math.floor(location / 4);
+    let column = Math.floor(location % n);
+    let row = Math.floor(location / n);
     return [row, column, location];
   };
 

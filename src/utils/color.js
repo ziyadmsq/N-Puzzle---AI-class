@@ -1,20 +1,24 @@
-export const gridTileColor = '#3d2963';
-export const backgroundColor = '#57407c';
+
 export const primaryFontColor = (opacity = 1) =>
-  `rgba(255, 255, 255, ${opacity})`;
-export const buttonHoverColor = '#d3386a';
-export const modalTextColor = '#534648';
-export const modalBackgroundColor = '#FFFFFF';
-export const overlayBackgroundColor = '#000000';
-export const gridOverlayBackground = '#412667b5';
+  `E5E1D6`;
+
+ export const buttonHoverColor = '#A6A39E';
+
+export const backgroundColor = '#A6A39E';
+
+export const tileColor = "#CECECE"; 
+export const tileShadowColor = "#636E72"; 
+export const tileCorrectColor = "#797979"; 
+export const tileCorrectShadowColor = "#2D3436"; 
+export const gridTileColor = '#E5E1D6';
 
 export default {
   backgroundColor,
   gridTileColor,
   primaryFontColor,
   buttonHoverColor,
-  modalTextColor,
-  modalBackgroundColor,
-  overlayBackgroundColor,
-  gridOverlayBackground
+  tileColor,
+  tileShadowColor,
+  tileCorrectColor,
+  tileCorrectShadowColor
 };

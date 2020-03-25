@@ -19,6 +19,8 @@ export default class Game extends Component {
         this.props.gameState === gameState.GAME_IDLE ||
         this.props.gameState === gameState.GAME_STARTED
       ) {
+        console.log(move);
+        
         this.props.moveCell(location, row, col, move);
       }
     }
@@ -32,7 +34,7 @@ export default class Game extends Component {
           <Score moves={this.props.moves} seconds={this.props.seconds} />
         </GameScore>
 
-        <Grid />
+        <Grid n={this.props.n}/>
 
         <PlayPauseContainer>
           <Button

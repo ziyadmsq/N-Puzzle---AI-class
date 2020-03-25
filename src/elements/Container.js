@@ -1,18 +1,21 @@
 import styled from 'styled-components';
 import { color, transition, bounceIn, fadeIn } from '@Utils';
 
+const cellWidth = 125;
+
 export const Container = styled.div`
-  width: 500px;
+  width: ${props => props.n * cellWidth}px;
   margin: 0 auto;
-  @media screen and (max-width: 520px) {
-    width: 291px;
-    margin: 0 auto;
-  }
 `;
 
+function getAuto(n) {
+  if (n >= 1)
+    return "auto " + getAuto(n - 1);
+  return "";
+}
 export const GridContainer = styled.div`
   margin: 5px 0;
-  grid-template-columns: auto auto auto auto;
+  grid-template-columns: ${function (props) { return getAuto(props.n); }};
   display: grid;
   position: relative;
   padding: 15px;
@@ -20,18 +23,11 @@ export const GridContainer = styled.div`
   touch-action: none;
   background: ${color.backgroundColor};
   border-radius: 12px;
-  width: 500px;
-  height: 500px;
+  width: ${props => props.n * cellWidth}px;
+  height: ${props => props.n * cellWidth}px;
   .grid-row {
     margin-bottom: 15px;
     display: flex;
-  }
-  @media screen and (max-width: 520px) {
-    width: 292px;
-    height: 292px;
-    .grid-row {
-      margin-bottom: 10px;
-    }
   }
 `;
 
@@ -50,12 +46,6 @@ export const GridOverlay = styled.div`
   width: 499px;
   height: 487px;
   animation: ${fadeIn} 250ms;
-  @media screen and (max-width: 520px) {
-    width: 280px;
-    height: 275px;
-    margin-left: 6px;
-    margin-top: 5px;
-  }
 `;
 
 export const PlayPauseContainer = styled.div`
@@ -68,11 +58,7 @@ export const CellContainer = styled.div`
   margin-right: 15px;
   border-radius: 10px;
   background-color: ${color.gridTileColor};
-  @media screen and (max-width: 520px) {
-    width: 57.5px;
-    height: 57.5px;
-    margin-right: 10px;
-  }
+
   &:last-child {
     margin-right: 0;
   }
@@ -82,10 +68,10 @@ export const CellContainer = styled.div`
 // 67px;
 export const NumberCellContainer = styled.div`
   display: ${props =>
-    props.number > 0 && props.number < 16 ? 'flex' : 'none'};
+    props.number > 0 ? 'flex' : 'none'};
   border-radius: 10px;
   background: ${props =>
-    props.index === props.number ? '#E88A45' : '#6ac6b8'};
+    props.index === props.number ? color.tileCorrectColor : color.tileColor};
   cursor: pointer;
   position: relative;
   user-select: none;
@@ -108,7 +94,7 @@ export const NumberCellContainer = styled.div`
   .ball-2 {
     position: absolute;
     background-color: ${props =>
-      props.index === props.number ? '  #CD583A' : '#499591'};
+    props.index === props.number ? color.tileCorrectShadowColor : color.tileShadowColor};
     opacity: 0.2;
     border-radius: 50%;
   }
@@ -126,14 +112,14 @@ export const NumberCellContainer = styled.div`
     right: 10px;
   }
   .shadow {
-    color: ${props => (props.index === props.number ? '  #CD583A' : '#499591')};
+    color: ${props => (props.index === props.number ? color.tileCorrectShadowColor : color.tileShadowColor)};
     font-size: 90px;
     margin-left: ${props =>
-      props.number.toString().length == 2
-        ? props.number === 11
-          ? -16
-          : -6
-        : props.number === 1
+    props.number.toString().length == 2
+      ? props.number === 11
+        ? -16
+        : -6
+      : props.number === 1
         ? -10
         : 0}px;
     margin-top: ${props => (props.number.toString().length == 2 ? -21 : -19)}px;
@@ -146,45 +132,7 @@ export const NumberCellContainer = styled.div`
     left: ${props => (props.number.toString().length == 2 ? 15 : 32)}px;
   }
 
-  @media screen and (max-width: 520px) {
-    width: 58px;
-    height: 58px;
-    line-height: 67.5px;
-    font-size: 45px;
-    padding-top: 9px;
-    padding-left: ${props => (props.number === 1 ? 3 : 0)}px;
-    border-radius: 5px;
-    .ball-1 {
-      height: 15px;
-      width: 15px;
-      top: 12px;
-      left: 9px;
-    }
-
-    .ball-2 {
-      height: 30px;
-      width: 30px;
-      bottom: 4px;
-      right: 7px;
-    }
-    .shadow {
-      font-size: 53px;
-      margin-left: ${props =>
-        props.number.toString().length == 2
-          ? props.number === 11
-            ? -6
-            : -1
-          : props.number === 1
-          ? -7
-          : 0}px;
-      margin-top: ${props =>
-        props.number.toString().length == 2 ? -20 : -19}px;
-    }
-    .number {
-      top: -14px;
-      left: ${props => (props.number.toString().length == 2 ? 7 : 16)}px;
-    }
-  }
+ 
 `;
 
 export const Keys = styled.span`
@@ -203,18 +151,14 @@ export const Keys = styled.span`
   & path {
     ${transition({ property: 'transform' })};
   }
-  @media screen and (max-width: 520px) {
-    display: none;
-  }
+ 
 `;
 
 export const GameScore = styled.div`
   padding: 0 15px;
   display: flex;
   justify-content: space-between;
-  @media screen and (max-width: 520px) {
-    padding: 20px 15px 0 15px;
-  }
+ 
 `;
 
 export const ScoreContainer = styled.div`
@@ -253,17 +197,7 @@ export const ScoreContainer = styled.div`
   .best {
     opacity: 0.5;
   }
-  @media screen and (max-width: 520px) {
-    padding-left: 10px;
-    border-radius: 5px;
-
-    .move-container,
-    .best-container,
-    .time-container {
-      font-size: 16px;
-      line-height: 14px;
-      font-weight: bold;
-    }
+  
 
     .move,
     .best,
@@ -289,18 +223,12 @@ export const GameInstructionContainer = styled.div`
   display: flex;
   padding: 0 17px 0 6px;
   justify-content: space-between;
-  @media screen and (max-width: 520px) {
-    display: block;
-  }
+ 
 `;
 
 export const Wave = styled.img`
   margin-top: -30px;
-  @media screen and (max-width: 520px) {
-    max-width: 270px;
-    height: auto;
-    margin-left: 9px;
-  }
+ 
 `;
 
 export const ModalContainer = styled.div`
@@ -350,17 +278,7 @@ export const Footer = styled.div`
     margin-top: 29px;
   }
 
-  @media (max-width: 520px) {
-    height: 22px;
-    margin-top: -10px;
-    padding: 10px 4px;
-    & .text {
-      margin: 26px auto 0px;
-    }
-    & .logos {
-      margin-top: 20px;
-    }
-  }
+  
 `;
 
 export const Profile = styled.a`
@@ -378,13 +296,4 @@ export const Profile = styled.a`
     color: ${color.buttonHoverColor};
   }
 
-  @media (max-width: 520px) {
-    svg,
-    path {
-      ${transition({})};
-      margin-right: 7px;
-      height: 22px;
-      width: 22px;
-    }
-  }
 `;

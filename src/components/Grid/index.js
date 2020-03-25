@@ -8,7 +8,6 @@ import {
 import { color, gameState } from '@Utils';
 
 import Cell from '../Cell';
-
 export default class Grid extends Component {
   cellRender(number = [], clickMove) {
     return number.map((i, _) => (
@@ -19,7 +18,7 @@ export default class Grid extends Component {
     return (
       <GameFactoryConsumer>
         {({ values, methods }) => (
-          <GridContainer>
+          <GridContainer n={this.props.n}>
             {this.cellRender(values.numbers, methods.clickMove)}
             {values.gameState === gameState.GAME_PAUSED && (
               <GridOverlay>
