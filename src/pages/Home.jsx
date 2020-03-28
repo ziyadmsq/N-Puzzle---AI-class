@@ -4,22 +4,23 @@ import { KeyBoardManagar } from '@HOC';
 import { Header, Game } from '@Components';
 import { Container, Wave, GameFactoryConsumer } from '@Elements';
 
-export let n = 4;
-const Home = ({ eventType }) => {
+const Home = ({ eventType, props }) => {
+
   return (
-    <Container n={n}>
-      <GameFactoryConsumer>
-        {({ values, methods }) => {
-          return (
+    <GameFactoryConsumer>
+      {({ values, methods }) => {
+        return (
+          <Container n={values.n}>
             <Fragment>
               <br />
-              <Game n={n} eventType={eventType} {...values} {...methods} />
+              <Game eventType={eventType} {...values} {...methods} />
               <br />
             </Fragment>
-          );
-        }}
-      </GameFactoryConsumer>
-    </Container>
+          </Container>
+
+        );
+      }}
+    </GameFactoryConsumer>
   );
 };
 

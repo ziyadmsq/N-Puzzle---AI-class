@@ -8,12 +8,12 @@ import {
   checkArray,
   gameState
 } from '@Utils';
-import {n} from "../pages/Home";
 
 const NEW_GAME = '__new_game__';
 const RESET_GAME = '__reset_game__';
-const nn1 = () => n * n - 1;
 const genrateArray = (num, add) => {
+  console.log(num + " " + add);
+
   let puzzle = [...Array(num)].map((_, i) => i + add);
   puzzle.push(0);
   return puzzle;
@@ -24,7 +24,7 @@ const SetValueContext = createContext(() => { });
 
 const isSolvable = puzzle => {
   let parity = 0;
-  let gridWidth = n;
+  let gridWidth = Math.sqrt(puzzle.length);
   let row = 0;
   let blankRow = 0;
   for (let i = 0; i < puzzle.length; i++) {
@@ -54,12 +54,12 @@ const isSolvable = puzzle => {
   }
 };
 
-const genratePuzzle = (arr, event) => {
+const genratePuzzle = (arr, event, nn1) => {
   if (event === NEW_GAME) {
     if (isSolvable(arr)) {
       return arr;
     } else {
-      return genratePuzzle(shuffle(genrateArray(nn1(), 1)), NEW_GAME);
+      return genratePuzzle(shuffle(genrateArray(nn1, 1)), NEW_GAME, nn1);
     }
   } else {
     return arr;
@@ -67,19 +67,30 @@ const genratePuzzle = (arr, event) => {
 };
 
 class GameFactory extends Component {
-  defaultState = (_event, num) => ({
-    numbers:
-      _event === NEW_GAME
-        ? genratePuzzle(shuffle(genrateArray(nn1(), num)), _event)
-        : shuffle(genrateArray(nn1(), num)),
-    moves: 0,
-    seconds: 0,
-    gameState: gameState.GAME_IDLE
-  });
 
   state = this.defaultState(NEW_GAME, 1);
 
   timerId = null;
+
+  nn1() {
+    if (this.state && this.state.n) {
+      return this.state.n * this.state.n - 1;
+    }
+    return 8;//n=3
+  }
+
+  defaultState(_event, num, n) {
+    return {
+      numbers:
+        _event === NEW_GAME
+          ? genratePuzzle(shuffle(genrateArray(this.nn1(), num)), _event, this.nn1())
+          : shuffle(genrateArray(this.nn1(), num)),
+      moves: 0,
+      seconds: 0,
+      n: n ? n : (this.state ? this.state.n : 3),
+      gameState: gameState.GAME_IDLE
+    }
+  }
 
   reset = () => {
     this.setState(this.defaultState(RESET_GAME));
@@ -91,14 +102,15 @@ class GameFactory extends Component {
     }, 100);
   };
 
-  gettingEmptyBoxLocation = () => {
+  gettingEmptyBoxLocation = (n) => {
     let location = this.state.numbers.indexOf(0);
     let column = Math.floor(location % n);
     let row = Math.floor(location / n);
     return [row, column, location];
   };
 
-  move = (from, row, col, moveType) => {
+  move = (from, row, col, moveType, n) => {
+
     this.setState(prevState => {
       let newState = null;
       const [updated, newNumList] = swapSpace(
@@ -106,12 +118,14 @@ class GameFactory extends Component {
         from,
         row,
         col,
-        moveType
+        moveType,
+        n
       );
       if (updated) {
         newState = {
           number: newNumList,
-          moves: prevState.moves + 1
+          moves: prevState.moves + 1,
+          n: prevState.n,
         };
         if (prevState.moves === 0) {
           this.setTimer();
@@ -148,7 +162,7 @@ class GameFactory extends Component {
     this.setState(prevState => {
       let newState = null;
       let to = prevState.numbers.indexOf(0);
-      if (isNeighbour(to, from)) {
+      if (isNeighbour(to, from, this.state.n)) {
         const newNumList = swap(prevState.numbers, to, from);
         newState = {
           number: newNumList,
@@ -191,6 +205,19 @@ class GameFactory extends Component {
     });
   };
 
+  changeN = (event) => {
+    console.log(event.target.value);
+
+    let n = parseInt(event.target.value);
+    this.setState(this.defaultState(RESET_GAME, 1, n));
+    setTimeout(() => {
+      this.setState(this.defaultState(NEW_GAME, 1, n));
+      if (this.timerId) {
+        clearInterval(this.timerId);
+      }
+    }, 100);
+  };
+
   render() {
     return (
       <ValuesContext.Provider value={this.state}>
@@ -201,7 +228,8 @@ class GameFactory extends Component {
             gettingEmptyBoxLocation: this.gettingEmptyBoxLocation,
             moveCell: this.move,
             clickMove: this.clickMove,
-            pauseGame: this.onPauseClick
+            pauseGame: this.onPauseClick,
+            changeN: this.changeN
           }}
         >
           {this.props.children}

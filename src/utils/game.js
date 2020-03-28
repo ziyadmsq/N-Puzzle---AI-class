@@ -1,4 +1,3 @@
-import {n} from "../pages/Home";
 
 export const gameState = {
   GAME_IDLE: '__game_idle__',
@@ -12,7 +11,7 @@ export const swap = (arr, from, to) => {
   return arr;
 };
 
-export const isNeighbour = (to, from) => {
+export const isNeighbour = (to, from,n) => {
   let emptyColumn = Math.floor(to % n);
   let emptyRow = Math.floor(to / n);
   let clickedColumn = Math.floor(from % n);
@@ -33,7 +32,7 @@ export const isNeighbour = (to, from) => {
   }
 };
 
-export const swapSpace = (arr, from, row, col, move) => {
+export const swapSpace = (arr, from, row, col, move,n) => {
   let yMove = move === 0 ? 1 : move === 2 ? -1 : 0;
   let xMove = move === 3 ? 1 : move === 1 ? -1 : 0;
   let newRow = row + yMove;

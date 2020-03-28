@@ -115,21 +115,20 @@ export const NumberCellContainer = styled.div`
     color: ${props => (props.index === props.number ? color.tileCorrectShadowColor : color.tileShadowColor)};
     font-size: 90px;
     margin-left: ${props =>
-    props.number.toString().length == 2
+    props.number.toString().length > 1
       ? props.number === 11
         ? -16
         : -6
       : props.number === 1
         ? -10
         : 0}px;
-    margin-top: ${props => (props.number.toString().length == 2 ? -21 : -19)}px;
+    margin-top: ${props => (props.number.toString().length > 1 ? -21 : -19)}px;
   }
   .number {
     color: white;
     z-index: 99;
     position: absolute;
     top: -22px;
-    left: ${props => (props.number.toString().length == 2 ? 15 : 32)}px;
   }
 
  
