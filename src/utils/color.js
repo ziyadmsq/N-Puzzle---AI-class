@@ -1,6 +1,6 @@
 
 export const primaryFontColor = (opacity = 1) =>
-  `E5E1D6`;
+  "#000";
 
  export const buttonHoverColor = '#A6A39E';
 

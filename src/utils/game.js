@@ -3,7 +3,8 @@ export const gameState = {
   GAME_IDLE: '__game_idle__',
   GAME_STARTED: '__game_started__',
   GAME_OVER: '__game_over__',
-  GAME_PAUSED: '__game_paused__'
+  GAME_PAUSED: '__game_paused__',
+  GAME_SOLVING: '__game_solving__',
 };
 
 export const swap = (arr, from, to) => {

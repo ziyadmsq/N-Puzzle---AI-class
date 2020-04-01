@@ -5,14 +5,14 @@ export const Button = styled.button`
   font-size: 22px;
   width: ${props => (props.type === 'big' ? '100%' : '150px')};
   display: block;
-  border-radius: 8px;
+  border-radius: 4px;
   border: none;
   cursor: pointer;
   font-weight: bold;
   outline: none;
   text-decoration: none;
-  line-height: 60px;
   text-align: center;
+  padding: 8px;
   background-color: ${color.gridTileColor};
   color: ${props =>
     props.textColor ? props.textColor : color.primaryFontColor(0.5)};

@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add @Home/undefined
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add react-spinners
 
 PATH: 
   C:\Program Files\nodejs\node_modules\npm\node_modules\npm-lifecycle\node-gyp-bin;D:\React Projects\15-puzzle\node_modules\.bin;C:\ProgramData\Anaconda3;C:\ProgramData\Anaconda3\Library\mingw-w64\bin;C:\ProgramData\Anaconda3\Library\usr\bin;C:\ProgramData\Anaconda3\Library\bin;C:\ProgramData\Anaconda3\Scripts;C:\Program Files\Java\jdk-11.0.4\bin;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\dotnet\;D:\Programs\Git\cmd;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;C:\tools\php73;C:\ProgramData\ComposerSetup\bin;D:\Programs\CMake\bin;C:\MinGW\bin;C:\Program Files (x86)\Yarn\bin\;C:\Program Files (x86)\GtkSharp\2.12\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\GnuWin32\bin;C:\Users\3izzo\AppData\Local\Microsoft\WindowsApps;D:\Programs\Microsoft VS Code\bin;C:\flutter\bin;C:\Users\3izzo\AppData\Roaming\npm;C:\Users\3izzo\AppData\Roaming\Composer\vendor\bin;C:\tools\mysql\current\bin;C:\Users\3izzo\AppData\Local\Yarn\bin;
@@ -14,17 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: https://registry.npmjs.org/@Home%2fundefined: Not found
-      at Request.params.callback [as _callback] (C:\Program Files (x86)\Yarn\lib\cli.js:65167:18)
-      at Request.self.callback (C:\Program Files (x86)\Yarn\lib\cli.js:129541:22)
-      at Request.emit (events.js:189:13)
-      at Request.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:130513:10)
-      at Request.emit (events.js:189:13)
-      at IncomingMessage.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:130435:12)
-      at Object.onceWrapper (events.js:277:13)
-      at IncomingMessage.emit (events.js:194:15)
-      at endReadableNT (_stream_readable.js:1103:12)
-      at process._tickCallback (internal/process/next_tick.js:63:19)
+  Error: EPERM: operation not permitted, unlink 'D:\React Projects\15-puzzle\node_modules\deasync\bin\win32-x64-node-10\deasync.node'
 
 npm manifest: 
   {
@@ -43,6 +33,8 @@ npm manifest:
       "react": "^16.7.0-alpha.2",
       "react-dom": "^16.7.0-alpha.2",
       "react-router-dom": "^4.4.0-beta.6",
+      "react-select": "^3.1.0",
+      "react-spinner": "^0.2.7",
       "styled-components": "^4.1.1"
     },
     "devDependencies": {

@@ -12,8 +12,6 @@ import {
 const NEW_GAME = '__new_game__';
 const RESET_GAME = '__reset_game__';
 const genrateArray = (num, add) => {
-  console.log(num + " " + add);
-
   let puzzle = [...Array(num)].map((_, i) => i + add);
   puzzle.push(0);
   return puzzle;
@@ -65,6 +63,23 @@ const genratePuzzle = (arr, event, nn1) => {
     return arr;
   }
 };
+const translateFromLetterIntoNums = (letters) => {
+  let res = [];
+  letters.forEach(l => {
+    if (l === "u")
+      res.push(0);
+    if (l === "d")
+      res.push(2);
+    if (l === "r")
+      res.push(3);
+    if (l === "l")
+      res.push(1);
+  });
+  return res;
+}
+const breadthSolver = (numbers) => {
+  return translateFromLetterIntoNums(["u", "u", "u", "u", "r", "d", "l", "r", "d", "l"]);
+}
 
 class GameFactory extends Component {
 
@@ -88,7 +103,9 @@ class GameFactory extends Component {
       moves: 0,
       seconds: 0,
       n: n ? n : (this.state ? this.state.n : 3),
-      gameState: gameState.GAME_IDLE
+      gameState: gameState.GAME_IDLE,
+      algrthm: { name: "A*" },
+      depth: 20,
     }
   }
 
@@ -159,6 +176,8 @@ class GameFactory extends Component {
   };
 
   clickMove = from => {
+    if (this.state.gameState === gameState.GAME_SOLVING)
+      return;
     this.setState(prevState => {
       let newState = null;
       let to = prevState.numbers.indexOf(0);
@@ -188,6 +207,8 @@ class GameFactory extends Component {
   };
 
   onPauseClick = () => {
+    if (this.state.gameState === gameState.GAME_SOLVING)
+      return;
     this.setState(prevState => {
       let newGameState = null;
 
@@ -206,8 +227,8 @@ class GameFactory extends Component {
   };
 
   changeN = (event) => {
-    console.log(event.target.value);
-
+    if (this.state.gameState === gameState.GAME_SOLVING)
+      return;
     let n = parseInt(event.target.value);
     this.setState(this.defaultState(RESET_GAME, 1, n));
     setTimeout(() => {
@@ -218,6 +239,40 @@ class GameFactory extends Component {
     }, 100);
   };
 
+  solve = () => {
+    // console.log("should start solving");
+    this.setState({ gameState: gameState.GAME_SOLVING });
+    if (this.timerId) {
+      clearInterval(this.timerId);
+    }
+    let moves = [];
+    switch (this.state.algrthm.name) {
+      case "Breadth":
+        moves = breadthSolver(this.s);
+        break;
+    }
+    let i = 0;
+    let timer = setInterval(function (m) {
+      if (i === m.length) {
+        clearInterval(timer);
+        return;
+      }
+      console.log(m[i]);
+      i++;
+    }, 500, moves);
+  }
+
+  changeAlgrthm = (newAlgrthm) => {
+    if (this.state.gameState === gameState.GAME_SOLVING)
+      return;
+    this.setState({ algrthm: newAlgrthm });
+  }
+
+  setDepth = (d) => {
+    if (this.state.gameState === gameState.GAME_SOLVING)
+      return;
+    this.setState({ depth: d });
+  }
   render() {
     return (
       <ValuesContext.Provider value={this.state}>
@@ -229,7 +284,10 @@ class GameFactory extends Component {
             moveCell: this.move,
             clickMove: this.clickMove,
             pauseGame: this.onPauseClick,
-            changeN: this.changeN
+            changeN: this.changeN,
+            solve: this.solve,
+            changeAlgrthm: this.changeAlgrthm,
+            setDepth: this.setDepth,
           }}
         >
           {this.props.children}

@@ -6,6 +6,7 @@ import {
   Icon
 } from '@Elements';
 import { color, gameState } from '@Utils';
+import ClipLoader from "react-spinners/ClipLoader";
 
 import Cell from '../Cell';
 export default class Grid extends Component {
@@ -18,7 +19,7 @@ export default class Grid extends Component {
     return (
       <GameFactoryConsumer>
         {({ values, methods }) => (
-          <GridContainer n={this.props.n}>
+          <GridContainer n={this.props.n} id="findme">
             {this.cellRender(values.numbers, methods.clickMove)}
             {values.gameState === gameState.GAME_PAUSED && (
               <GridOverlay>
@@ -33,6 +34,16 @@ export default class Grid extends Component {
                   />
                 </div>
               </GridOverlay>
+            )}
+            {values.gameState === gameState.GAME_SOLVING && (
+              <div className="solvingBlocker">
+                <div>
+                <ClipLoader
+                  size={150}
+                  color={"#123abc"}
+                />
+                </div>
+              </div>
             )}
           </GridContainer>
         )}

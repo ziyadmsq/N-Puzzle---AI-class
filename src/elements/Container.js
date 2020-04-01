@@ -3,8 +3,17 @@ import { color, transition, bounceIn, fadeIn } from '@Utils';
 
 const cellWidth = 125;
 
+export const MovmentPanel = styled.div`
+  background-color: ${color.gridTileColor};
+  width: ${cellWidth * 2}px;
+  height: ${props => props.n * cellWidth + 154}px;
+  margin-left:${props => props.n * cellWidth}px;
+  border-radius:4px;
+  padding:8px;
+`;
+
 export const Container = styled.div`
-  width: ${props => props.n * cellWidth}px;
+  width: ${props => (props.n + 2) * cellWidth}px;
   margin: 0 auto;
 `;
 
@@ -43,8 +52,8 @@ export const GridOverlay = styled.div`
   margin-top: 3px;
   margin-left: 2px;
   border-radius: 10px;
-  width: 499px;
-  height: 487px;
+  width: 100%;
+  height: 100%;
   animation: ${fadeIn} 250ms;
 `;
 
@@ -165,7 +174,7 @@ export const ScoreContainer = styled.div`
   display: flex;
   margin-left: 10px;
   padding-left: 15px;
-  border-radius: 8px;
+  border-radius: 4px;
 
   .move,
   .best,
