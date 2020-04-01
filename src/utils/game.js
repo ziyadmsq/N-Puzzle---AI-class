@@ -5,6 +5,7 @@ export const gameState = {
   GAME_OVER: '__game_over__',
   GAME_PAUSED: '__game_paused__',
   GAME_SOLVING: '__game_solving__',
+  GAME_PLAYING_SOLUTION: '__game_playing_solution__',
 };
 
 export const swap = (arr, from, to) => {

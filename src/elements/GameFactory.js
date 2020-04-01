@@ -71,14 +71,21 @@ const translateFromLetterIntoNums = (letters) => {
     if (l === "d")
       res.push(2);
     if (l === "r")
-      res.push(3);
-    if (l === "l")
       res.push(1);
+    if (l === "l")
+      res.push(3);
   });
   return res;
 }
 const breadthSolver = (numbers) => {
-  return translateFromLetterIntoNums(["u", "u", "u", "u", "r", "d", "l", "r", "d", "l"]);
+  //this is a simulation
+  //wait 2 sec
+  let now = new Date().getTime();
+  while (new Date().getTime() - now < 2000);
+
+  console.log("found sol");
+
+  return translateFromLetterIntoNums(["u", "r", "d", "l",]);
 }
 
 class GameFactory extends Component {
@@ -176,7 +183,7 @@ class GameFactory extends Component {
   };
 
   clickMove = from => {
-    if (this.state.gameState === gameState.GAME_SOLVING)
+    if (this.state.gameState === gameState.GAME_SOLVING || this.state.gameState === gameState.GAME_PLAYING_SOLUTION)
       return;
     this.setState(prevState => {
       let newState = null;
@@ -207,7 +214,7 @@ class GameFactory extends Component {
   };
 
   onPauseClick = () => {
-    if (this.state.gameState === gameState.GAME_SOLVING)
+    if (this.state.gameState === gameState.GAME_SOLVING || this.state.gameState === gameState.GAME_PLAYING_SOLUTION || this.state.gameState === gameState.GAME_PLAYING_SOLUTION)
       return;
     this.setState(prevState => {
       let newGameState = null;
@@ -227,7 +234,7 @@ class GameFactory extends Component {
   };
 
   changeN = (event) => {
-    if (this.state.gameState === gameState.GAME_SOLVING)
+    if (this.state.gameState === gameState.GAME_SOLVING || this.state.gameState === gameState.GAME_PLAYING_SOLUTION)
       return;
     let n = parseInt(event.target.value);
     this.setState(this.defaultState(RESET_GAME, 1, n));
@@ -240,36 +247,55 @@ class GameFactory extends Component {
   };
 
   solve = () => {
-    // console.log("should start solving");
-    this.setState({ gameState: gameState.GAME_SOLVING });
+    if (this.state.gameState === gameState.GAME_SOLVING || this.state.gameState === gameState.GAME_PLAYING_SOLUTION)
+      return;
     if (this.timerId) {
       clearInterval(this.timerId);
     }
+    this.setState({ gameState: gameState.GAME_SOLVING }, () => {
+      console.log(this.state.gameState);
+      setTimeout(() => {
+        let moves = this.getMoves();
+        console.log(moves);
+        this.playSolution(moves);
+      }, 100);
+    });
+  }
+
+  getMoves() {
     let moves = [];
     switch (this.state.algrthm.name) {
       case "Breadth":
-        moves = breadthSolver(this.s);
+        moves = breadthSolver(this.state.number);
         break;
     }
-    let i = 0;
-    let timer = setInterval(function (m) {
-      if (i === m.length) {
-        clearInterval(timer);
-        return;
-      }
-      console.log(m[i]);
-      i++;
-    }, 500, moves);
+    return moves;
+  }
+
+  playSolution(moves) {
+    this.setState({ gameState: gameState.GAME_PLAYING_SOLUTION }, () => {
+      console.log("state set");
+      let i = 0;
+      let timer = setInterval(function (m,n,getBox,move) {
+        if (i === m.length) {
+          clearInterval(timer);
+          return;
+        }
+        const [row, col, location] = getBox(n);
+        move(location, row, col, m[i], n)
+        i++;
+      }, 500, moves,this.state.n,this.gettingEmptyBoxLocation,this.move);
+    });
   }
 
   changeAlgrthm = (newAlgrthm) => {
-    if (this.state.gameState === gameState.GAME_SOLVING)
+    if (this.state.gameState === gameState.GAME_SOLVING || this.state.gameState === gameState.GAME_PLAYING_SOLUTION)
       return;
     this.setState({ algrthm: newAlgrthm });
   }
 
   setDepth = (d) => {
-    if (this.state.gameState === gameState.GAME_SOLVING)
+    if (this.state.gameState === gameState.GAME_SOLVING || this.state.gameState === gameState.GAME_PLAYING_SOLUTION)
       return;
     this.setState({ depth: d });
   }
