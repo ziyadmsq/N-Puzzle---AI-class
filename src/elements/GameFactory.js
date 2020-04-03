@@ -8,6 +8,7 @@ import {
   checkArray,
   gameState
 } from '@Utils';
+import AStar from './AStar';
 
 const NEW_GAME = '__new_game__';
 const RESET_GAME = '__reset_game__';
@@ -22,7 +23,7 @@ const SetValueContext = createContext(() => { });
 
 const isSolvable = puzzle => {
   let parity = 0;
-  let gridWidth = Math.sqrt(puzzle.length);
+  var gridWidth = Math.sqrt(puzzle.length);
   let row = 0;
   let blankRow = 0;
   for (let i = 0; i < puzzle.length; i++) {
@@ -53,17 +54,24 @@ const isSolvable = puzzle => {
 };
 
 const genratePuzzle = (arr, event, nn1) => {
+  return [5,8,3,6,7,4,1,0,2]
   if (event === NEW_GAME) {
     if (isSolvable(arr)) {
+      console.log("genratePuzzle()"+arr)
       return arr;
     } else {
-      return genratePuzzle(shuffle(genrateArray(nn1, 1)), NEW_GAME, nn1);
+      genArr = genratePuzzle(shuffle(genrateArray(nn1, 1)), NEW_GAME, nn1);
+      console.log("genratePuzzle()"+genArr)
+      return genArr
     }
   } else {
+    console.log("genratePuzzle()"+arr)
     return arr;
   }
 };
 const translateFromLetterIntoNums = (letters) => {
+  // based on the keyboard's arrows
+  // it should be reversed for Astar algorithm 
   let res = [];
   letters.forEach(l => {
     if (l === "u")
@@ -84,8 +92,31 @@ const breadthSolver = (numbers) => {
   while (new Date().getTime() - now < 2000);
 
   console.log("found sol");
-
+  console.log("translateFromLetterIntoNums() = " + translateFromLetterIntoNums(["u", "r", "d", "l",]))
   return translateFromLetterIntoNums(["u", "r", "d", "l",]);
+}
+const AStarSolver = (initalState) => {
+  //this is a simulation
+  //wait 2 sec
+  // let now = new Date().getTime();
+  // while (new Date().getTime() - now < 2000);
+  // // i only did the previous lines because Obada did it and it seems important
+
+  // // create goal state 
+  // // TODO: make it adaptable to n*n
+  // goalState = [1,2,3,4,5,6,7,8,0]
+  // var astar = new AStar(init, goal, 0);
+  // astarResult = astar.execute()
+  // 'uldruurddluruldrulldrurdd'.split("")
+  console.log(initalState)
+  var astar = new AStar(initalState,3)
+  console.log("it ain't much, but it's honest work")
+  var result = astar.execute();
+  console.log(result.path)
+  // return translateFromLetterIntoNums('drulddluurdldruldrruldluu'.split(""));
+  return translateFromLetterIntoNums(result.path.split(""));
+
+
 }
 
 class GameFactory extends Component {
@@ -256,7 +287,7 @@ class GameFactory extends Component {
       console.log(this.state.gameState);
       setTimeout(() => {
         let moves = this.getMoves();
-        console.log(moves);
+        console.log("moves"+moves);
         this.playSolution(moves);
       }, 100);
     });
@@ -266,7 +297,15 @@ class GameFactory extends Component {
     let moves = [];
     switch (this.state.algrthm.name) {
       case "Breadth":
+        console.log("this.state.number = " + this.state.number)
+        console.log("this.state.numbers = " +this.state.numbers)
         moves = breadthSolver(this.state.number);
+        break;
+      case "A*":
+        // change  to Astar class
+        // astar = new AStar()
+        console.log(this.state.number)
+        moves = AStarSolver(this.state.numbers)
         break;
     }
     return moves;
