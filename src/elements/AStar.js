@@ -13,8 +13,8 @@ import HashSet from 'hashset';
  *  */
 function AStar(initial, n) {
   this.initial = convertState(initial, n);
-  this.goal = createGoalState(initial.size);
-  this.empty = empty;
+  this.goal = createGoalState(3);
+  this.empty = 0;
   this.queue = new PriorityQueue({
     comparator: function(a, b) {
       if (a.value > b.value) return 1;

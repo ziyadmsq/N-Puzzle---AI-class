@@ -1,7 +1,5 @@
 PriorityQueue = require('js-priority-queue');
 HashSet = require('hashset');
-// import PriorityQueue from 'js-priority-queue';
-// import HashSet from 'hashset';
 /**
  * this is the object of A star
  * contains many function stored in the prototype
@@ -11,9 +9,9 @@ HashSet = require('hashset');
  *  - clone
  *  - heuristic
  *  */
-function AStar(initial, n) {
-  this.initial = convertState(initial, n);
-  this.goal = createGoalState(initial.size);
+function AStar(initial, goal, empty) {
+  this.initial = initial;
+  this.goal = goal;
   this.empty = empty;
   this.queue = new PriorityQueue({
     comparator: function(a, b) {
@@ -25,6 +23,22 @@ function AStar(initial, n) {
   this.queue.queue(initial);
   this.visited = new HashSet();
 }
+// function AStar(init, n) {
+//     console.log(convertState(init, n))
+//     console.log(createGoalState(3))
+//     this.initial = convertState(init, n-1);
+//     this.goal = createGoalState(3);
+//     this.empty = 0;
+//     this.queue = new PriorityQueue({
+//       comparator: function(a, b) {
+//         if (a.value > b.value) return 1;
+//         if (a.value < b.value) return -1;
+//         return 0;
+//       }
+//     });
+//     this.queue.queue(init);
+//     this.visited = new HashSet();
+//   }
 
 function Node(value, state, emptyRow, emptyCol, depth) {
   this.value = value;
@@ -138,35 +152,36 @@ Array.prototype.clone = function() {
 AStar.prototype.heuristic = function(node) {
   return this.manhattanDistance(node);
 };
-function createGoalState(n) {
-  let array = [];
-  let array2D = [];
-  for (let i = 1; i < n * n; i++) {
-    array.push(i);
-  }
-  array.push(0);
-  while (array.length) array2D.push(array.splice(0, n));
-  return new Node(0, array2D, n, n, 0);
+function createGoalState(n){
+    let array = []
+    let array2D = []
+    for(let i = 1 ; i < n*n ; i++){
+        array.push(i)
+    }
+    array.push(0)
+    while(array.length) array2D.push(array.splice(0,n));
+    return new Node(0,array2D,n-1,n-1,0)
 }
 function start() {
   //   5,8,3,6,7,4,1,0,2
 
   // var init = new Node(convertState([5,8,3,6,7,4,1,0,2],3));
-//   var init = convertState([5, 8, 3, 6, 7, 4, 1, 0, 2], 3);
-//   var goal = createGoalState(init.size);
-  //   new Node(
-  //     0,
-  //     [
-  //       [1, 2, 3],
-  //       [4, 5, 6],
-  //       [7, 8, 0]
-  //     ],
-  //     2,
-  //     2,
-  //     0
-  //   );
-//   console.log('my size ' + init.size);
-  var astar = new AStar([5, 8, 3, 6, 7, 4, 1, 0, 2], 3);
+  var init = convertState([5,8,3,6,7,4,1,0,2],3)
+  var goal = createGoalState(3)
+//   new Node(
+//     0,
+//     [
+//       [1, 2, 3],
+//       [4, 5, 6],
+//       [7, 8, 0]
+//     ],
+//     2,
+//     2,
+//     0
+//   );
+console.log("my size"+ init.size)
+var astar = new AStar(init,goal, 0);
+//   var astar = new AStar([5,8,3,6,7,4,1,0,2], 3);
   // To measure time taken by the algorithm
   var startTime = new Date();
   // Execute AStar

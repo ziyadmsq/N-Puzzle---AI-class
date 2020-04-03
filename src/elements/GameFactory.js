@@ -95,11 +95,67 @@ const breadthSolver = (numbers) => {
   console.log("translateFromLetterIntoNums() = " + translateFromLetterIntoNums(["u", "r", "d", "l",]))
   return translateFromLetterIntoNums(["u", "r", "d", "l",]);
 }
+function createGoalState(n){
+  let array = []
+  let array2D = []
+  for(let i = 1 ; i < n*n ; i++){
+      array.push(i)
+  }
+  array.push(0)
+  while(array.length) array2D.push(array.splice(0,n));
+  return new Node(0,array2D,n-1,n-1,0)
+}
+function convertState(array, n) {
+  // Node(value, state, emptyRow, emptyCol, depth)
+
+  let array2D = [],
+    emptyRow,
+    emptyCol,
+    i,
+    k;
+  for (i = 0, k = -1; i < array.length; i++) {
+    if (i % n === 0) {
+      // add new row
+      k++;
+      array2D[k] = [];
+    }
+    // push column
+    if (array[i] === 0) {
+      emptyRow = k;
+      emptyCol = i % n;
+    }
+    array2D[k].push(array[i]);
+  }
+  // let ourState = [0, array2D, emptyRow, emptyCol, 0];
+  return new Node(0, array2D, emptyRow, emptyCol, 0);
+}
+function Node(value, state, emptyRow, emptyCol, depth) {
+  this.value = value;
+  this.state = state;
+  this.emptyCol = emptyCol;
+  this.emptyRow = emptyRow;
+  this.depth = depth;
+  this.strRepresentation = '';
+  this.path = '';
+
+  // String representation of the state in CSV format
+  for (var i = 0; i < state.length; i++) {
+    // We assume the state is a square
+    if (state[i].length != state.length) {
+      console.log('Number of rows differs from number of columns');
+      return false;
+    }
+
+    for (var j = 0; j < state[i].length; j++)
+      this.strRepresentation += state[i][j] + ',';
+  }
+  this.size = this.state.length;
+}
 const AStarSolver = (initalState) => {
   //this is a simulation
   //wait 2 sec
-  // let now = new Date().getTime();
-  // while (new Date().getTime() - now < 2000);
+  let now = new Date().getTime();
+  while (new Date().getTime() - now < 2000);
   // // i only did the previous lines because Obada did it and it seems important
 
   // // create goal state 
@@ -108,11 +164,26 @@ const AStarSolver = (initalState) => {
   // var astar = new AStar(init, goal, 0);
   // astarResult = astar.execute()
   // 'uldruurddluruldrulldrurdd'.split("")
-  console.log(initalState)
-  var astar = new AStar(initalState,3)
+  var init = convertState([5,8,3,6,7,4,1,0,2],3)
+  var goal = createGoalState(3)
+//   new Node(
+//     0,
+//     [
+//       [1, 2, 3],
+//       [4, 5, 6],
+//       [7, 8, 0]
+//     ],
+//     2,
+//     2,
+//     0
+//   );
+console.log("my size"+ init.size)
+var astar = new AStar(init,goal, 0);
+  // console.log(initalState)
+  // var astar = new AStar(initalState,3)
   console.log("it ain't much, but it's honest work")
   var result = astar.execute();
-  console.log(result.path)
+  console.log(result)
   // return translateFromLetterIntoNums('drulddluurdldruldrruldluu'.split(""));
   return translateFromLetterIntoNums(result.path.split(""));
 
