@@ -21,13 +21,14 @@ function AStar(initial, goal, empty) {
     }
   });
   this.queue.queue(initial);
+//   console.log(initial.state)
   this.visited = new HashSet();
 }
 // function AStar(init, n) {
-//     console.log(convertState(init, n))
-//     console.log(createGoalState(3))
-//     this.initial = convertState(init, n-1);
-//     this.goal = createGoalState(3);
+//     // console.log(convertState(init, n))
+//     // console.log(createGoalState(n))
+//     this.initial = convertState(init, n);
+//     this.goal = createGoalState(n);
 //     this.empty = 0;
 //     this.queue = new PriorityQueue({
 //       comparator: function(a, b) {
@@ -65,13 +66,16 @@ function Node(value, state, emptyRow, emptyCol, depth) {
 AStar.prototype.execute = function() {
   // Add current state to visited list
   this.visited.add(this.initial.strRepresentation);
-
+//   console.log(this.queue.length)
   while (this.queue.length > 0) {
+    // console.log(this.queue.length)
     var current = this.queue.dequeue();
 
-    if (current.strRepresentation == this.goal.strRepresentation)
+    if (current.strRepresentation == this.goal.strRepresentation){
+        // console.log("current strRepresentation "+current.strRepresentation)
+        // console.log("goal strRepresentation "+this.goal.strRepresentation)
       return current;
-
+    }
     this.expandNode(current);
   }
 };
@@ -81,6 +85,7 @@ AStar.prototype.expandNode = function(node) {
   var col = node.emptyCol;
   var row = node.emptyRow;
   var newNode = '';
+//   console.log(node.emptyCol)
 
   // Up
   if (row > 0) {
@@ -166,20 +171,11 @@ function start() {
   //   5,8,3,6,7,4,1,0,2
 
   // var init = new Node(convertState([5,8,3,6,7,4,1,0,2],3));
-  var init = convertState([5,8,3,6,7,4,1,0,2],3)
-  var goal = createGoalState(3)
-//   new Node(
-//     0,
-//     [
-//       [1, 2, 3],
-//       [4, 5, 6],
-//       [7, 8, 0]
-//     ],
-//     2,
-//     2,
-//     0
-//   );
-console.log("my size"+ init.size)
+  hi = '10 5 8 2 11 1 15 4 0 7 12 3 9 13 14 6'.split(' ')
+//   var init = convertState([5,8,3,6,7,4,1,0,2],3)
+  var init = convertState(hi,4)
+  var goal = createGoalState(4)
+console.log("my size "+ init.size)
 var astar = new AStar(init,goal, 0);
 //   var astar = new AStar([5,8,3,6,7,4,1,0,2], 3);
   // To measure time taken by the algorithm
@@ -224,6 +220,7 @@ AStar.prototype.manhattanDistance = function(node) {
       }
     }
   }
+//   console.log('manhattan '+result)
   return result;
 };
 AStar.prototype.linearConflicts = function(node) {
@@ -282,7 +279,7 @@ AStar.prototype.heuristic = function(node) {
 function convertState(array, n) {
   // Node(value, state, emptyRow, emptyCol, depth)
 
-  let array2D = [],
+  var array2D = [],
     emptyRow,
     emptyCol,
     i,
@@ -294,14 +291,16 @@ function convertState(array, n) {
       array2D[k] = [];
     }
     // push column
-    if (array[i] === 0) {
+    if (array[i] == 0) {
       emptyRow = k;
       emptyCol = i % n;
     }
     array2D[k].push(array[i]);
   }
   // let ourState = [0, array2D, emptyRow, emptyCol, 0];
-  return new Node(0, array2D, emptyRow, emptyCol, 0);
+  node = new Node(0, array2D, emptyRow, emptyCol, 0);
+//   console.log(node)
+  return node
 }
 
 function test() {

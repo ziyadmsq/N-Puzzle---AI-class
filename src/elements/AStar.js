@@ -1,20 +1,9 @@
-// PriorityQueue = require('js-priority-queue');
-// HashSet = require('hashset');
 import PriorityQueue from 'js-priority-queue';
 import HashSet from 'hashset';
-/**
- * this is the object of A star
- * contains many function stored in the prototype
- * the functions are listed
- *  - execute
- *  - expandNode
- *  - clone
- *  - heuristic
- *  */
-function AStar(initial, n) {
-  this.initial = convertState(initial, n);
-  this.goal = createGoalState(3);
-  this.empty = 0;
+function AStar(initial, goal, empty) {
+  this.initial = initial;
+  this.goal = goal;
+  this.empty = empty;
   this.queue = new PriorityQueue({
     comparator: function(a, b) {
       if (a.value > b.value) return 1;
@@ -23,8 +12,23 @@ function AStar(initial, n) {
     }
   });
   this.queue.queue(initial);
+//   console.log(initial.state)
   this.visited = new HashSet();
 }
+// function AStar(initial, n) {
+//   this.initial = convertState(initial, n);
+//   this.goal = createGoalState(3);
+//   this.empty = 0;
+//   this.queue = new PriorityQueue({
+//     comparator: function(a, b) {
+//       if (a.value > b.value) return 1;
+//       if (a.value < b.value) return -1;
+//       return 0;
+//     }
+//   });
+//   this.queue.queue(initial);
+//   this.visited = new HashSet();
+// }
 
 function Node(value, state, emptyRow, emptyCol, depth) {
   this.value = value;
@@ -154,17 +158,6 @@ function start() {
   // var init = new Node(convertState([5,8,3,6,7,4,1,0,2],3));
   var init = convertState([5, 8, 3, 6, 7, 4, 1, 0, 2], 3);
   var goal = createGoalState(init.size);
-  //   new Node(
-  //     0,
-  //     [
-  //       [1, 2, 3],
-  //       [4, 5, 6],
-  //       [7, 8, 0]
-  //     ],
-  //     2,
-  //     2,
-  //     0
-  //   );
   console.log('my size ' + init.size);
   var astar = new AStar(init, goal, 0);
   // To measure time taken by the algorithm
@@ -175,21 +168,6 @@ function start() {
   var endTime = new Date();
   console.log(result);
 }
-
-AStar.prototype.misplacedTiles = function(node) {
-  var result = 0;
-
-  for (var i = 0; i < node.state.length; i++) {
-    for (var j = 0; j < node.state[i].length; j++)
-      if (
-        node.state[i][j] != this.goal.state[i][j] &&
-        node.state[i][j] != this.empty
-      )
-        result++;
-  }
-
-  return result;
-};
 AStar.prototype.manhattanDistance = function(node) {
   var result = 0;
 
@@ -211,54 +189,6 @@ AStar.prototype.manhattanDistance = function(node) {
   }
   return result;
 };
-AStar.prototype.linearConflicts = function(node) {
-  var result = 0;
-  var state = node.state;
-
-  // Row Conflicts
-  for (var i = 0; i < state.length; i++)
-    result += this.findConflicts(state, i, 1);
-
-  // Column Conflicts
-  for (var i = 0; i < state[0].length; i++)
-    result += this.findConflicts(state, i, 0);
-
-  return result;
-};
-
-AStar.prototype.findConflicts = function(state, i, dimension) {
-  var result = 0;
-  var tilesRelated = new Array();
-
-  // Loop foreach pair of elements in the row/column
-  for (var h = 0; h < state.length - 1 && !tilesRelated.contains(h); h++) {
-    for (var k = h + 1; k < state.length && !tilesRelated.contains(h); k++) {
-      var moves =
-        dimension == 1
-          ? this.inConflict(i, state[i][h], state[i][k], h, k, dimension)
-          : this.inConflict(i, state[h][i], state[k][i], h, k, dimension);
-
-      if (moves == 0) continue;
-      result += 2;
-      tilesRelated.push([h, k]);
-      break;
-    }
-  }
-
-  return result;
-};
-
-// AStar.prototype.inConflict = function (index, a, b, indexA, indexB, dimension)
-// {
-//    var indexGoalA = -1
-//    var indexGoalB = -1
-
-//    for (var c = 0; c = 0 && indexGoalB >= 0) &&
-//            ((indexA  indexGoalB) ||
-//           (indexA > indexB && indexGoalA < indexGoalB))
-//                      ? 2
-//                      : 0;
-// }
 
 AStar.prototype.heuristic = function(node) {
   return this.manhattanDistance(node) + this.manhattanDistance(node);
@@ -279,7 +209,7 @@ function convertState(array, n) {
       array2D[k] = [];
     }
     // push column
-    if (array[i] === 0) {
+    if (array[i] == 0) {
       emptyRow = k;
       emptyCol = i % n;
     }
