@@ -83,18 +83,17 @@ const translateFromLetterIntoNums = letters => {
   });
   return res;
 };
-const breadthSolver = numbers => {
-  //this is a simulation
-  //wait 2 sec
+const breadthSolver = initalState => {
   let now = new Date().getTime();
   while (new Date().getTime() - now < 2000);
-
-  console.log('found sol');
-  console.log(
-    'translateFromLetterIntoNums() = ' +
-      translateFromLetterIntoNums(['u', 'r', 'd', 'l'])
-  );
-  return translateFromLetterIntoNums(['u', 'r', 'd', 'l']);
+  var init = convertState(initalState, gridWidth);
+  var goal = createGoalState(gridWidth);
+  // TODO make the depth editable 
+  var bfs = new BFS(init, goal, 0);
+  console.log("it ain't much, but it's honest work");
+  var result = bfs.execute();
+  console.log(result);
+  return translateFromLetterIntoNums(result.path.split(''));
 };
 const dfsSolver = initalState =>{
   let now = new Date().getTime();
