@@ -1,13 +1,13 @@
 HashSet = require('hashset');
 Stack = require('stack-data');
 log = console.log;
-function DFS(initial, goal, empty,iterations) {
+function IDS(initial, goal, empty,depthLimit, iterations) {
   this.initial = initial;
   this.goal = goal;
   this.empty = empty;
   this.visited = new HashSet();
-  this.dept = 500;
-  this.iterations = iterations
+  this.depthLimit = depthLimit;
+  this.iterations = iterations;
   this.fringe = []; // TODO: add fringe
   this.fringe.push(initial);
 }
@@ -35,22 +35,27 @@ function Node(value, state, emptyRow, emptyCol, depth) {
   this.size = this.state.length;
 }
 
-DFS.prototype.execute = function() {
+IDS.prototype.execute = function() {
   // Add current state to visited list
   log(this.fringe.length);
+  var found = false
   this.visited.add(this.initial.strRepresentation);
-
-  while (this.fringe.length > 0) {
-    var current = this.fringe.pop();
-    // log(current)
-    if (current.strRepresentation == this.goal.strRepresentation)
-      return current;
-    if (this.limit > current.depth) this.expandNode(current);
+  var current = this.initial
+  while (true) {
+    this.depthLimit+=this.iterations
+    while (this.fringe.length > 0) {
+      current = this.fringe.pop();
+      // log(current)
+      if (current.strRepresentation == this.goal.strRepresentation){
+          return current;
+      }
+      if (this.depthLimit > current.depth) this.expandNode(current);
+    }
+    
   }
-  
 };
 
-DFS.prototype.expandNode = function(node) {
+IDS.prototype.expandNode = function(node) {
   // log(node)
   var temp = '';
   var newState = '';
@@ -170,14 +175,15 @@ function test() {
   //   var init = convertState(hi, 3);
   var goal = createGoalState(3);
   console.log('my size ' + init.size);
-  var dfs = new DFS(init, goal, 0);
+  var ids = new IDS(init, goal, 0, 50,50);
   //   var astar = new AStar([5,8,3,6,7,4,1,0,2], 3);
   // To measure time taken by the algorithm
   var startTime = new Date();
   // Execute AStar
-  var result = dfs.execute();
+  var result = ids.execute();
   // To measure time taken by the algorithm
   var endTime = new Date();
   console.log(result);
 }
-test();
+// test();
+export default IDS
