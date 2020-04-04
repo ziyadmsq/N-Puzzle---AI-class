@@ -1,14 +1,14 @@
 import HashSet from 'hashset';
-log = console.log;
-function DFS(initial, goal, empty) {
-  this.initial = initial;
-  this.goal = goal;
-  this.empty = empty;
-  this.visited = new HashSet();
-  this.limit = 3000;
-  this.fringe = []; // TODO: add fringe
-  this.fringe.push(initial);
-}
+// log = console.log;
+function DFS(initial, goal, empty,limit) {
+    this.initial = initial;
+    this.goal = goal;
+    this.empty = empty;
+    this.visited = new HashSet();
+    this.limit = limit;
+    this.fringe = []; // TODO: add fringe
+    this.fringe.push(initial);
+  }
 
 function Node(value, state, emptyRow, emptyCol, depth) {
   this.value = value;
@@ -35,7 +35,7 @@ function Node(value, state, emptyRow, emptyCol, depth) {
 
 DFS.prototype.execute = function() {
   // Add current state to visited list
-  log(this.fringe.length);
+//   log(this.fringe.length);
   this.visited.add(this.initial.strRepresentation);
 
   while (this.fringe.length > 0) {

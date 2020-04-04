@@ -9,6 +9,8 @@ import {
   gameState
 } from '@Utils';
 import AStar from './AStar';
+import DFS from './DFS'
+import IDS from './IDS'
 
 const NEW_GAME = '__new_game__';
 const RESET_GAME = '__reset_game__';
@@ -54,7 +56,7 @@ const isSolvable = puzzle => {
 };
 
 const genratePuzzle = (arr, event, nn1) => {
-  // return [5,8,3,6,7,4,1,0,2]
+  return [5,8,3,6,7,4,1,0,2]
   // return '1 8 7 4 10 2 9 15 0 13 5 14 11 12 6 3'.split(' ')
   if (event === NEW_GAME) {
     if (isSolvable(arr)) {
@@ -94,8 +96,17 @@ const breadthSolver = numbers => {
   );
   return translateFromLetterIntoNums(['u', 'r', 'd', 'l']);
 };
-function dfsSolver(numbers){
-  
+const dfsSolver = initalState =>{
+  let now = new Date().getTime();
+  while (new Date().getTime() - now < 2000);
+  var init = convertState(initalState, gridWidth);
+  var goal = createGoalState(gridWidth);
+  // TODO make the depth editable 
+  var dfs = new DFS(init, goal, 0, 50);
+  console.log("it ain't much, but it's honest work");
+  var result = dfs.execute();
+  console.log(result);
+  return translateFromLetterIntoNums(result.path.split(''));
 }
 function createGoalState(n) {
   let array = [];
@@ -164,6 +175,18 @@ const AStarSolver = initalState => {
   console.log(result);
   return translateFromLetterIntoNums(result.path.split(''));
 };
+const idsSolver = initalState =>{
+  let now = new Date().getTime();
+  while (new Date().getTime() - now < 2000);
+  var init = convertState(initalState, gridWidth);
+  var goal = createGoalState(gridWidth);
+  // TODO make the depth editable 
+  var ids = new IDS(init, goal, 0, 30,10);
+  console.log("it ain't much, but it's honest work");
+  var result = ids.execute();
+  console.log(result);
+  return translateFromLetterIntoNums(result.path.split(''));
+}
 
 class GameFactory extends Component {
   state = this.defaultState(NEW_GAME, 1);
@@ -367,6 +390,12 @@ class GameFactory extends Component {
         // astar = new AStar()
         console.log(this.state.number);
         moves = AStarSolver(this.state.numbers);
+        break;
+      case 'Depth':
+        moves = dfsSolver(this.state.numbers)
+        break;
+      case 'IDS':
+        moves = idsSolver(this.state.numbers)
         break;
     }
     return moves;

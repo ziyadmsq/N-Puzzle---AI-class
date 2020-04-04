@@ -1,12 +1,12 @@
 HashSet = require('hashset');
 Stack = require('stack-data');
 log = console.log;
-function DFS(initial, goal, empty) {
+function DFS(initial, goal, empty,limit) {
   this.initial = initial;
   this.goal = goal;
   this.empty = empty;
   this.visited = new HashSet();
-  this.limit = 3000;
+  this.limit = limit;
   this.fringe = []; // TODO: add fringe
   this.fringe.push(initial);
 }
@@ -168,7 +168,7 @@ function test() {
   //   var init = convertState(hi, 3);
   var goal = createGoalState(3);
   console.log('my size ' + init.size);
-  var dfs = new DFS(init, goal, 0);
+  var dfs = new DFS(init, goal, 0,50);
   //   var astar = new AStar([5,8,3,6,7,4,1,0,2], 3);
   // To measure time taken by the algorithm
   var startTime = new Date();

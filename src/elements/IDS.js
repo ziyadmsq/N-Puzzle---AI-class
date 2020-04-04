@@ -1,6 +1,6 @@
-HashSet = require('hashset');
-Stack = require('stack-data');
-log = console.log;
+// HashSet = require('hashset');
+import HashSet from 'hashset';
+// log = console.log;
 function IDS(initial, goal, empty,depthLimit, iterations) {
   this.initial = initial;
   this.goal = goal;
@@ -37,12 +37,16 @@ function Node(value, state, emptyRow, emptyCol, depth) {
 
 IDS.prototype.execute = function() {
   // Add current state to visited list
-  log(this.fringe.length);
   var found = false
   this.visited.add(this.initial.strRepresentation);
   var current = this.initial
   while (true) {
-    this.depthLimit+=this.iterations
+    this.depthLimit= this.depthLimit + this.iterations
+    current = this.initial
+    this.fringe = []
+    this.fringe.push(current)
+    this.visited = new HashSet()
+
     while (this.fringe.length > 0) {
       current = this.fringe.pop();
       // log(current)
@@ -175,7 +179,7 @@ function test() {
   //   var init = convertState(hi, 3);
   var goal = createGoalState(3);
   console.log('my size ' + init.size);
-  var ids = new IDS(init, goal, 0, 50,50);
+  var ids = new IDS(init, goal, 0, 30,10);
   //   var astar = new AStar([5,8,3,6,7,4,1,0,2], 3);
   // To measure time taken by the algorithm
   var startTime = new Date();
