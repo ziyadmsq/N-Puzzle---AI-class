@@ -94,6 +94,9 @@ const breadthSolver = numbers => {
   );
   return translateFromLetterIntoNums(['u', 'r', 'd', 'l']);
 };
+function dfsSolver(numbers){
+  
+}
 function createGoalState(n) {
   let array = [];
   let array2D = [];
