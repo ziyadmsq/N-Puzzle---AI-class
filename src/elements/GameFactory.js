@@ -11,6 +11,7 @@ import {
 import AStar from './AStar';
 import DFS from './DFS'
 import IDS from './IDS'
+import BFS from './BFS'
 
 const NEW_GAME = '__new_game__';
 const RESET_GAME = '__reset_game__';
@@ -88,7 +89,6 @@ const breadthSolver = initalState => {
   while (new Date().getTime() - now < 2000);
   var init = convertState(initalState, gridWidth);
   var goal = createGoalState(gridWidth);
-  // TODO make the depth editable 
   var bfs = new BFS(init, goal, 0);
   console.log("it ain't much, but it's honest work");
   var result = bfs.execute();
@@ -100,8 +100,9 @@ const dfsSolver = initalState =>{
   while (new Date().getTime() - now < 2000);
   var init = convertState(initalState, gridWidth);
   var goal = createGoalState(gridWidth);
-  // TODO make the depth editable 
-  var dfs = new DFS(init, goal, 0, 50);
+  // TODO make the max depth editable 
+  let maxDepth = 50
+  var dfs = new DFS(init, goal, 0, maxDepth);
   console.log("it ain't much, but it's honest work");
   var result = dfs.execute();
   console.log(result);
@@ -180,7 +181,8 @@ const idsSolver = initalState =>{
   var init = convertState(initalState, gridWidth);
   var goal = createGoalState(gridWidth);
   // TODO make the depth editable 
-  var ids = new IDS(init, goal, 0, 30,10);
+  let iter = 10, depthstart = 30
+  var ids = new IDS(init, goal, 0, depthstart,iter);
   console.log("it ain't much, but it's honest work");
   var result = ids.execute();
   console.log(result);
@@ -382,7 +384,7 @@ class GameFactory extends Component {
       case 'Breadth':
         console.log('this.state.number = ' + this.state.number);
         console.log('this.state.numbers = ' + this.state.numbers);
-        moves = breadthSolver(this.state.number);
+        moves = breadthSolver(this.state.numbers);
         break;
       case 'A*':
         // change  to Astar class
