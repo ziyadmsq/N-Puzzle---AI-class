@@ -51,7 +51,7 @@ export default class Game extends Component {
       for (let i = 0; i < x.length; i++) {
         x[i] = parseInt(x[i])
       }
-      if(this.isSquare(x))
+      if(this.isSquare(x.length))
         if (isSolvable(x))
           this.props.resetGame(x)
           else {
@@ -99,7 +99,7 @@ export default class Game extends Component {
                 <Button
                   type="big"
                   textColor="white"
-                  onClick={this.onNewGameButton}
+                  onClick={this.props.resetGame}
                 >
                   Play Again
               </Button>
