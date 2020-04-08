@@ -23,7 +23,7 @@ const genrateArray = (num, add) => {
 };
 var gridWidth = 3;
 const ValuesContext = createContext({});
-const SetValueContext = createContext(() => {});
+const SetValueContext = createContext(() => { });
 
 const isSolvable = puzzle => {
   let parity = 0;
@@ -58,19 +58,19 @@ const isSolvable = puzzle => {
 };
 
 const genratePuzzle = (arr, event, nn1) => {
-  return [5,8,3,6,7,4,1,0,2]
+  return [5, 8, 3, 6, 7, 4, 1, 0, 2]
   // return '1 8 7 4 10 2 9 15 0 13 5 14 11 12 6 3'.split(' ')
   if (event === NEW_GAME) {
     if (isSolvable(arr)) {
-      console.log('genratePuzzle()' + arr);
+    
       return arr;
     } else {
       genArr = genratePuzzle(shuffle(genrateArray(nn1, 1)), NEW_GAME, nn1);
-      console.log('genratePuzzle()' + genArr);
+    
       return genArr;
     }
   } else {
-    console.log('genratePuzzle()' + arr);
+  
     return arr;
   }
 };
@@ -86,38 +86,30 @@ const translateFromLetterIntoNums = letters => {
   return res;
 };
 const breadthSolver = initalState => {
-  let now = new Date().getTime();
-  while (new Date().getTime() - now < 2000);
+
   var init = convertState(initalState, gridWidth);
   var goal = createGoalState(gridWidth);
   var bfs = new BFS(init, goal, 0);
-  console.log("it ain't much, but it's honest work");
+
   var result = bfs.execute();
-  console.log(result);
   return translateFromLetterIntoNums(result.path.split(''));
 };
 const greedySolver = initalState => {
-  let now = new Date().getTime();
-  while (new Date().getTime() - now < 2000);
+
   var init = convertState(initalState, gridWidth);
   var goal = createGoalState(gridWidth);
   var greedy = new Greedy(init, goal, 0);
-  console.log("it ain't much, but it's honest work");
   var result = greedy.execute();
-  console.log(result);
   return translateFromLetterIntoNums(result.path.split(''));
 }
-const dfsSolver = initalState =>{
-  let now = new Date().getTime();
-  while (new Date().getTime() - now < 2000);
+const dfsSolver = initalState => {
+
   var init = convertState(initalState, gridWidth);
   var goal = createGoalState(gridWidth);
   // TODO make the max depth editable 
   let maxDepth = 50
   var dfs = new DFS(init, goal, 0, maxDepth);
-  console.log("it ain't much, but it's honest work");
   var result = dfs.execute();
-  console.log(result);
   return translateFromLetterIntoNums(result.path.split(''));
 }
 function createGoalState(n) {
@@ -165,7 +157,7 @@ function Node(value, state, emptyRow, emptyCol, depth) {
   for (var i = 0; i < state.length; i++) {
     // We assume the state is a square
     if (state[i].length != state.length) {
-      console.log('Number of rows differs from number of columns');
+    
       return false;
     }
 
@@ -175,29 +167,21 @@ function Node(value, state, emptyRow, emptyCol, depth) {
   this.size = this.state.length;
 }
 const AStarSolver = initalState => {
-  //this is a simulation
-  //wait 2 sec
-  let now = new Date().getTime();
-  while (new Date().getTime() - now < 2000);
+
   var init = convertState(initalState, gridWidth);
   var goal = createGoalState(gridWidth);
   var astar = new AStar(init, goal, 0);
-  console.log("it ain't much, but it's honest work");
   var result = astar.execute();
-  console.log(result);
   return translateFromLetterIntoNums(result.path.split(''));
 };
-const idsSolver = initalState =>{
-  let now = new Date().getTime();
-  while (new Date().getTime() - now < 2000);
+const idsSolver = initalState => {
+
   var init = convertState(initalState, gridWidth);
   var goal = createGoalState(gridWidth);
   // TODO make the depth editable 
   let iter = 10, depthstart = 30
-  var ids = new IDS(init, goal, 0, depthstart,iter);
-  console.log("it ain't much, but it's honest work");
+  var ids = new IDS(init, goal, 0, depthstart, iter);
   var result = ids.execute();
-  console.log(result);
   return translateFromLetterIntoNums(result.path.split(''));
 }
 
@@ -218,10 +202,10 @@ class GameFactory extends Component {
       numbers:
         _event === NEW_GAME
           ? genratePuzzle(
-              shuffle(genrateArray(this.nn1(), num)),
-              _event,
-              this.nn1()
-            )
+            shuffle(genrateArray(this.nn1(), num)),
+            _event,
+            this.nn1()
+          )
           : shuffle(genrateArray(this.nn1(), num)),
       moves: 0,
       seconds: 0,
@@ -381,10 +365,10 @@ class GameFactory extends Component {
       clearInterval(this.timerId);
     }
     this.setState({ gameState: gameState.GAME_SOLVING }, () => {
-      console.log(this.state.gameState);
+    
       setTimeout(() => {
         let moves = this.getMoves();
-        console.log('moves' + moves);
+      
         this.playSolution(moves);
       }, 100);
     });
@@ -394,14 +378,14 @@ class GameFactory extends Component {
     let moves = [];
     switch (this.state.algrthm.name) {
       case 'Breadth':
-        console.log('this.state.number = ' + this.state.number);
-        console.log('this.state.numbers = ' + this.state.numbers);
+      
+      
         moves = breadthSolver(this.state.numbers);
         break;
       case 'A*':
         // change  to Astar class
         // astar = new AStar()
-        console.log(this.state.number);
+      
         moves = AStarSolver(this.state.numbers);
         break;
       case 'Depth':
@@ -419,10 +403,10 @@ class GameFactory extends Component {
 
   playSolution(moves) {
     this.setState({ gameState: gameState.GAME_PLAYING_SOLUTION }, () => {
-      console.log('state set');
+    
       let i = 0;
       let timer = setInterval(
-        function(m, n, getBox, move) {
+        function (m, n, getBox, move) {
           if (i === m.length) {
             clearInterval(timer);
             return;
