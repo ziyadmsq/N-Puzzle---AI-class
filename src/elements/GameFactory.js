@@ -12,6 +12,7 @@ import AStar from './AStar';
 import DFS from './DFS'
 import IDS from './IDS'
 import BFS from './BFS'
+import Greedy from './Greedy'
 
 const NEW_GAME = '__new_game__';
 const RESET_GAME = '__reset_game__';
@@ -95,6 +96,17 @@ const breadthSolver = initalState => {
   console.log(result);
   return translateFromLetterIntoNums(result.path.split(''));
 };
+const greedySolver = initalState => {
+  let now = new Date().getTime();
+  while (new Date().getTime() - now < 2000);
+  var init = convertState(initalState, gridWidth);
+  var goal = createGoalState(gridWidth);
+  var greedy = new Greedy(init, goal, 0);
+  console.log("it ain't much, but it's honest work");
+  var result = greedy.execute();
+  console.log(result);
+  return translateFromLetterIntoNums(result.path.split(''));
+}
 const dfsSolver = initalState =>{
   let now = new Date().getTime();
   while (new Date().getTime() - now < 2000);
@@ -397,6 +409,9 @@ class GameFactory extends Component {
         break;
       case 'IDS':
         moves = idsSolver(this.state.numbers)
+        break;
+      case 'Greedy':
+        moves = greedySolver(this.state.numbers)
         break;
     }
     return moves;

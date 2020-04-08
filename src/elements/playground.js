@@ -15,9 +15,10 @@ function AStar(initial, goal, empty) {
   this.empty = empty;
   this.queue = new PriorityQueue({
     comparator: function(a, b) {
-      if (a.value > b.value) return 1;
-      if (a.value < b.value) return -1;
-      return 0;
+      // if (a.value > b.value) return 1;
+      // if (a.value < b.value) return -1;
+      // return 0;
+      return a.value - b.value;
     }
   });
   this.queue.queue(initial);
