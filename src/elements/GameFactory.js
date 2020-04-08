@@ -23,7 +23,7 @@ const genrateArray = (num, add) => {
 };
 var gridWidth = 3;
 const ValuesContext = createContext({});
-const SetValueContext = createContext(() => {});
+const SetValueContext = createContext(() => { });
 
 const isSolvable = puzzle => {
   let parity = 0;
@@ -58,7 +58,7 @@ const isSolvable = puzzle => {
 };
 
 const genratePuzzle = (arr, event, nn1) => {
-  return [5,8,3,6,7,4,1,0,2]
+  return [5, 8, 3, 6, 7, 4, 1, 0, 2]
   // return '1 8 7 4 10 2 9 15 0 13 5 14 11 12 6 3'.split(' ')
   if (event === NEW_GAME) {
     if (isSolvable(arr)) {
@@ -107,7 +107,7 @@ const greedySolver = initalState => {
   console.log(result);
   return translateFromLetterIntoNums(result.path.split(''));
 }
-const dfsSolver = initalState =>{
+const dfsSolver = initalState => {
   let now = new Date().getTime();
   while (new Date().getTime() - now < 2000);
   var init = convertState(initalState, gridWidth);
@@ -187,14 +187,14 @@ const AStarSolver = initalState => {
   console.log(result);
   return translateFromLetterIntoNums(result.path.split(''));
 };
-const idsSolver = initalState =>{
+const idsSolver = initalState => {
   let now = new Date().getTime();
   while (new Date().getTime() - now < 2000);
   var init = convertState(initalState, gridWidth);
   var goal = createGoalState(gridWidth);
   // TODO make the depth editable 
   let iter = 10, depthstart = 30
-  var ids = new IDS(init, goal, 0, depthstart,iter);
+  var ids = new IDS(init, goal, 0, depthstart, iter);
   console.log("it ain't much, but it's honest work");
   var result = ids.execute();
   console.log(result);
@@ -213,16 +213,16 @@ class GameFactory extends Component {
     return 8; //n=3
   }
 
-  defaultState(_event, num, n) {
+  defaultState(_event, num, n, arr) {
     return {
-      numbers:
+      numbers: arr === undefined ? (
         _event === NEW_GAME
           ? genratePuzzle(
-              shuffle(genrateArray(this.nn1(), num)),
-              _event,
-              this.nn1()
-            )
-          : shuffle(genrateArray(this.nn1(), num)),
+            shuffle(genrateArray(this.nn1(), num)),
+            _event,
+            this.nn1()
+          )
+          : shuffle(genrateArray(this.nn1(), num))) : arr,
       moves: 0,
       seconds: 0,
       n: n ? n : this.state ? this.state.n : 3,
@@ -232,14 +232,17 @@ class GameFactory extends Component {
     };
   }
 
-  reset = () => {
-    this.setState(this.defaultState(RESET_GAME));
-    setTimeout(() => {
-      this.setState(this.defaultState(NEW_GAME, 1));
+  reset = (arr) => {
+    this.setState(this.defaultState());
+    setTimeout((arr) => {
+      if (arr === undefined)
+        this.setState(this.defaultState(NEW_GAME, 1));
+      else
+        this.setState(this.defaultState(NEW_GAME, 1, Math.sqrt(arr.length), arr));
       if (this.timerId) {
         clearInterval(this.timerId);
       }
-    }, 100);
+    }, 100, arr);
   };
 
   gettingEmptyBoxLocation = n => {
@@ -422,7 +425,7 @@ class GameFactory extends Component {
       console.log('state set');
       let i = 0;
       let timer = setInterval(
-        function(m, n, getBox, move) {
+        function (m, n, getBox, move) {
           if (i === m.length) {
             clearInterval(timer);
             return;
@@ -481,6 +484,7 @@ class GameFactory extends Component {
   }
 }
 
+export {isSolvable};
 export const GameFactoryConsumer = ({ children }) => {
   return (
     <ValuesContext.Consumer>
