@@ -8,11 +8,11 @@ import {
   checkArray,
   gameState
 } from '@Utils';
-import AStar from './AStar';
-import DFS from './DFS'
-import IDS from './IDS'
-import BFS from './BFS'
-import Greedy from './Greedy'
+import AStar from '../Solvers/AStar';
+import DFS from '../Solvers/DFS'
+import IDS from '../Solvers/IDS'
+import BFS from '../Solvers/BFS'
+import Greedy from '../Solvers/Greedy'
 
 const NEW_GAME = '__new_game__';
 const RESET_GAME = '__reset_game__';
@@ -21,13 +21,12 @@ const genrateArray = (num, add) => {
   puzzle.push(0);
   return puzzle;
 };
-var gridWidth = 3;
 const ValuesContext = createContext({});
 const SetValueContext = createContext(() => { });
 
 const isSolvable = puzzle => {
   let parity = 0;
-  gridWidth = Math.sqrt(puzzle.length);
+  let gridWidth = Math.sqrt(puzzle.length);
   let row = 0;
   let blankRow = 0;
   for (let i = 0; i < puzzle.length; i++) {
@@ -58,19 +57,21 @@ const isSolvable = puzzle => {
 };
 
 const genratePuzzle = (arr, event, nn1) => {
-  return [5, 8, 3, 6, 7, 4, 1, 0, 2]
+  // return [5, 8, 3, 6, 7, 4, 1, 0, 2]
+  // return [5, 1, 7, 3, 9, 2, 11, 4, 13, 6, 15, 8, 0, 10, 14, 12]
+  return [2,5,13,12,1,0,3,15,9,7,14,6,10,11,8,4];
   // return '1 8 7 4 10 2 9 15 0 13 5 14 11 12 6 3'.split(' ')
   if (event === NEW_GAME) {
     if (isSolvable(arr)) {
-    
+
       return arr;
     } else {
       genArr = genratePuzzle(shuffle(genrateArray(nn1, 1)), NEW_GAME, nn1);
-    
+
       return genArr;
     }
   } else {
-  
+
     return arr;
   }
 };
@@ -86,6 +87,7 @@ const translateFromLetterIntoNums = letters => {
   return res;
 };
 const breadthSolver = initalState => {
+  let gridWidth = Math.sqrt(initalState.length);
 
   var init = convertState(initalState, gridWidth);
   var goal = createGoalState(gridWidth);
@@ -95,6 +97,7 @@ const breadthSolver = initalState => {
   return translateFromLetterIntoNums(result.path.split(''));
 };
 const greedySolver = initalState => {
+  let gridWidth = Math.sqrt(initalState.length);
 
   var init = convertState(initalState, gridWidth);
   var goal = createGoalState(gridWidth);
@@ -103,6 +106,7 @@ const greedySolver = initalState => {
   return translateFromLetterIntoNums(result.path.split(''));
 }
 const dfsSolver = initalState => {
+  let gridWidth = Math.sqrt(initalState.length);
 
   var init = convertState(initalState, gridWidth);
   var goal = createGoalState(gridWidth);
@@ -125,23 +129,19 @@ function createGoalState(n) {
 function convertState(array, n) {
   let array2D = [],
     emptyRow,
-    emptyCol,
-    i,
-    k;
-  for (i = 0, k = -1; i < array.length; i++) {
-    if (i % n === 0) {
-      // add new row
-      k++;
-      array2D[k] = [];
+    emptyCol;
+  for (let i = 0; i < n; i++) {
+    array2D.push([]);
+    for (let j = 0; j < n; j++) {
+      array2D[i][j] = array[i * n + j];
+      if (array2D[i][j] == 0) {
+        emptyRow = i;
+        emptyCol = j;
+      }
     }
-
-    if (array[i] == 0) {
-      emptyRow = k;
-      emptyCol = i % n;
-    }
-    // push column
-    array2D[k].push(array[i]);
   }
+  console.table(array2D);
+
   return new Node(0, array2D, emptyRow, emptyCol, 0);
 }
 function Node(value, state, emptyRow, emptyCol, depth) {
@@ -157,7 +157,7 @@ function Node(value, state, emptyRow, emptyCol, depth) {
   for (var i = 0; i < state.length; i++) {
     // We assume the state is a square
     if (state[i].length != state.length) {
-    
+
       return false;
     }
 
@@ -167,6 +167,7 @@ function Node(value, state, emptyRow, emptyCol, depth) {
   this.size = this.state.length;
 }
 const AStarSolver = initalState => {
+  let gridWidth = Math.sqrt(initalState.length);
 
   var init = convertState(initalState, gridWidth);
   var goal = createGoalState(gridWidth);
@@ -175,6 +176,7 @@ const AStarSolver = initalState => {
   return translateFromLetterIntoNums(result.path.split(''));
 };
 const idsSolver = initalState => {
+  let gridWidth = Math.sqrt(initalState.length);
 
   var init = convertState(initalState, gridWidth);
   var goal = createGoalState(gridWidth);
@@ -365,10 +367,10 @@ class GameFactory extends Component {
       clearInterval(this.timerId);
     }
     this.setState({ gameState: gameState.GAME_SOLVING }, () => {
-    
+
       setTimeout(() => {
         let moves = this.getMoves();
-      
+
         this.playSolution(moves);
       }, 100);
     });
@@ -378,14 +380,11 @@ class GameFactory extends Component {
     let moves = [];
     switch (this.state.algrthm.name) {
       case 'Breadth':
-      
-      
+
+
         moves = breadthSolver(this.state.numbers);
         break;
       case 'A*':
-        // change  to Astar class
-        // astar = new AStar()
-      
         moves = AStarSolver(this.state.numbers);
         break;
       case 'Depth':
@@ -403,7 +402,7 @@ class GameFactory extends Component {
 
   playSolution(moves) {
     this.setState({ gameState: gameState.GAME_PLAYING_SOLUTION }, () => {
-    
+
       let i = 0;
       let timer = setInterval(
         function (m, n, getBox, move) {
@@ -415,7 +414,7 @@ class GameFactory extends Component {
           move(location, row, col, m[i], n);
           i++;
         },
-        500,
+        150,
         moves,
         this.state.n,
         this.gettingEmptyBoxLocation,

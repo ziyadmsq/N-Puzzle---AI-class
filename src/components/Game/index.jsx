@@ -41,7 +41,6 @@ export default class Game extends Component {
   setDepth = (e) => this.props.setDepth(e.target.value);
 
   render() {
-
     return (
       <div >
         <div style={{ float: "left" }}>
