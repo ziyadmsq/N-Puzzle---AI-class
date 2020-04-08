@@ -40,7 +40,7 @@ const ModalCard = styled.div`
   border-radius: 10px;
   padding: 15px;
   min-width: 320px;
-  background-color: ${color.modalBackgroundColor};
+  background-color: #ffffff;
   height: 200px;
   ${elevation}
   @media screen and (max-width: 520px) {

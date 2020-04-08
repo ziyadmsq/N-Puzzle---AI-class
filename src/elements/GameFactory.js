@@ -58,14 +58,13 @@ const isSolvable = puzzle => {
 };
 
 const genratePuzzle = (arr, event, nn1) => {
-  return [5, 8, 3, 6, 7, 4, 1, 0, 2]
   // return '1 8 7 4 10 2 9 15 0 13 5 14 11 12 6 3'.split(' ')
   if (event === NEW_GAME) {
     if (isSolvable(arr)) {
       console.log('genratePuzzle()' + arr);
       return arr;
     } else {
-      genArr = genratePuzzle(shuffle(genrateArray(nn1, 1)), NEW_GAME, nn1);
+      let genArr = genratePuzzle(shuffle(genrateArray(nn1, 1)), NEW_GAME, nn1);
       console.log('genratePuzzle()' + genArr);
       return genArr;
     }

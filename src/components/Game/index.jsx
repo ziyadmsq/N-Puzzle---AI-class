@@ -42,11 +42,13 @@ export default class Game extends Component {
   isSquare = (n) => n > 0 && Math.sqrt(n) % 1 === 0;
 
   onNewGameButton = () => {
-    let x = prompt("Enter customized n-puzzle.Enter numbers seprated by space \n,and for the empty block Enter 0 for example: \"1 0 2 3 5 4 7 6 8 \" ")
+    let x = prompt("Enter customized n-puzzle.Enter numbers seprated by space"
+    +"\nand for the empty block Enter 0 for example: \"1 0 2 3 5 4 7 6 8 \"\nLeave it empty for random puzzle")
     if (x == "")
       this.props.resetGame()
     else if (x == null) { }
     else {
+      x = x.trim()
       x = x.split(' ')
       for (let i = 0; i < x.length; i++) {
         x[i] = parseInt(x[i])
@@ -98,8 +100,8 @@ export default class Game extends Component {
               <div>
                 <Button
                   type="big"
-                  textColor="white"
-                  onClick={this.props.resetGame}
+                  textColor="black"
+                  onClick={this.onNewGameButton}
                 >
                   Play Again
               </Button>
