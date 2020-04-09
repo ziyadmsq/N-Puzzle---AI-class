@@ -10,7 +10,7 @@ import {
 } from '@Elements';
 import Score from '../Score';
 import Grid from '../Grid';
-
+import { isSolvable } from '../../elements/GameFactory.js';
 import { gameState } from '@Utils';
 
 const algorithms = [
@@ -39,13 +39,40 @@ export default class Game extends Component {
   algorithmChange = (value) => this.props.changeAlgrthm({ name: value.value });
 
   setDepth = (e) => this.props.setDepth(e.target.value);
+  isSquare = (n) => n > 0 && Math.sqrt(n) % 1 === 0;
+
+  onNewGameButton = () => {
+    let x = prompt("Enter customized n-puzzle.Enter numbers seprated by space"
+    +"\nand for the empty block Enter 0 for example: \"1 0 2 3 5 4 7 6 8 \"\nLeave it empty for random puzzle")
+    if (x == "")
+      this.props.resetGame()
+    else if (x == null) { }
+    else {
+      x = x.trim()
+      x = x.split(' ')
+      for (let i = 0; i < x.length; i++) {
+        x[i] = parseInt(x[i])
+      }
+      if(this.isSquare(x.length))
+        if (isSolvable(x))
+          this.props.resetGame(x)
+          else {
+            alert("Not solvable input")
+            this.onNewGameButton()
+          }
+      else {
+        alert("Not solvable input")
+        this.onNewGameButton()
+      }
+    }
+  }
 
   render() {
     return (
       <div >
         <div style={{ float: "left" }}>
           <GameScore>
-            <Button onClick={this.props.resetGame}>new game</Button>
+            <Button onClick={this.onNewGameButton}>new game</Button>
             <Score moves={this.props.moves} seconds={this.props.seconds} />
           </GameScore>
           <PlayPauseContainer>
@@ -72,8 +99,8 @@ export default class Game extends Component {
               <div>
                 <Button
                   type="big"
-                  textColor="white"
-                  onClick={this.props.resetGame}
+                  textColor="black"
+                  onClick={this.onNewGameButton}
                 >
                   Play Again
               </Button>
