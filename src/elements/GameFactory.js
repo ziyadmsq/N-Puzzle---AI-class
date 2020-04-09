@@ -86,39 +86,7 @@ const translateFromLetterIntoNums = letters => {
   });
   return res;
 };
-const breadthSolver = initalState => {
-  let gridWidth = Math.sqrt(initalState.length);
 
-  var init = convertState(initalState, gridWidth);
-  var goal = createGoalState(gridWidth);
-  var bfs = new BFS(init, goal, 0);
-
-  var result = bfs.execute();
-  return translateFromLetterIntoNums(result.path.split(''));
-};
-const greedySolver = initalState => {
-  let gridWidth = Math.sqrt(initalState.length);
-
-  var init = convertState(initalState, gridWidth);
-  var goal = createGoalState(gridWidth);
-  var greedy = new Greedy(init, goal, 0);
-  var result = greedy.execute();
-  return translateFromLetterIntoNums(result.path.split(''));
-}
-const dfsSolver = (initalState, maxDepth) => {
-  let gridWidth = Math.sqrt(initalState.length);
-
-  var init = convertState(initalState, gridWidth);
-  var goal = createGoalState(gridWidth);
-
-  var dfs = new DFS(init, goal, 0, maxDepth);
-  var result = dfs.execute();
-  if (result)
-    return translateFromLetterIntoNums(result.path.split(''));
-  else {
-    return [];
-  }
-}
 function createGoalState(n) {
   let array = [];
   let array2D = [];
@@ -146,24 +114,6 @@ function convertState(array, n) {
   // console.table(array2D);
 
   return new SolverNode(0, array2D, emptyRow, emptyCol, 0);
-}
-const AStarSolver = initalState => {
-  let gridWidth = Math.sqrt(initalState.length);
-
-  var init = convertState(initalState, gridWidth);
-  var goal = createGoalState(gridWidth);
-  var astar = new AStar(init, goal, 0);
-  var result = astar.execute();
-  return translateFromLetterIntoNums(result.path.split(''));
-};
-const idsSolver = (initalState, delta) => {
-  let gridWidth = Math.sqrt(initalState.length);
-
-  var init = convertState(initalState, gridWidth);
-  var goal = createGoalState(gridWidth);
-  var ids = new IDS(init, goal, 0, delta);
-  var result = ids.execute();
-  return translateFromLetterIntoNums(result.path.split(''));
 }
 
 class GameFactory extends Component {
@@ -360,27 +310,33 @@ class GameFactory extends Component {
   };
 
   getMoves() {
-    let moves = [];
+    let init = convertState(this.state.numbers, this.state.n);
+    let goal = createGoalState(this.state.n);
+
+    let solver = {};
     switch (this.state.algrthm.name) {
       case 'Breadth':
-
-
-        moves = breadthSolver(this.state.numbers);
+        solver = new BFS(init, goal, 0);
         break;
       case 'A*':
-        moves = AStarSolver(this.state.numbers);
+        solver = new AStar(init, goal, 0);
         break;
       case 'Depth':
-        moves = dfsSolver(this.state.numbers, this.state.depth)
+        solver = new DFS(init, goal, 0, this.state.depth);
         break;
       case 'IDS':
-        moves = idsSolver(this.state.numbers, this.state.delta)
+        solver = new IDS(init, goal, 0, this.state.delta);
         break;
       case 'Greedy':
-        moves = greedySolver(this.state.numbers)
+        solver = new Greedy(init, goal, 0);
         break;
     }
-    return moves;
+    var result = solver.execute();
+    if (result)
+      return translateFromLetterIntoNums(result.path.split(''));
+    else {
+      return [];
+    }
   }
 
   playSolution(moves) {
@@ -429,8 +385,8 @@ class GameFactory extends Component {
       this.state.gameState === gameState.GAME_PLAYING_SOLUTION
     )
       return;
-      console.log(d + " " + this.state.delta);
-      
+    console.log(d + " " + this.state.delta);
+
     this.setState({ delta: d });
   };
   render() {
