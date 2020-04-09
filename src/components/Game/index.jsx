@@ -39,6 +39,7 @@ export default class Game extends Component {
   algorithmChange = (value) => this.props.changeAlgrthm({ name: value.value });
 
   setDepth = (e) => this.props.setDepth(e.target.value);
+  setDelta = (e) => this.props.setDelta(e.target.value);
   isSquare = (n) => n > 0 && Math.sqrt(n) % 1 === 0;
 
   onNewGameButton = () => {
@@ -118,6 +119,10 @@ export default class Game extends Component {
           <div hidden={this.props.algrthm.name !== "Depth"}>
             <label style={{ color: "#000", fontSize: 22 }}> Max Depth </label>
             <input className="input" type="number" defaultValue="20" onChange={this.setDepth} />
+          </div>
+          <div hidden={this.props.algrthm.name !== "IDS"}>
+            <label style={{ color: "#000", fontSize: 22 }}> Delta </label>
+            <input className="input" type="number" defaultValue="1" onChange={this.setDelta} />
           </div>
           <Button
             onClick={this.props.solve}

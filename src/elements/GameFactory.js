@@ -105,16 +105,19 @@ const greedySolver = initalState => {
   var result = greedy.execute();
   return translateFromLetterIntoNums(result.path.split(''));
 }
-const dfsSolver = initalState => {
+const dfsSolver = (initalState, maxDepth) => {
   let gridWidth = Math.sqrt(initalState.length);
 
   var init = convertState(initalState, gridWidth);
   var goal = createGoalState(gridWidth);
-  // TODO make the max depth editable 
-  let maxDepth = 5
+
   var dfs = new DFS(init, goal, 0, maxDepth);
   var result = dfs.execute();
-  return translateFromLetterIntoNums(result.path.split(''));
+  if (result)
+    return translateFromLetterIntoNums(result.path.split(''));
+  else {
+    return [];
+  }
 }
 function createGoalState(n) {
   let array = [];
@@ -153,14 +156,12 @@ const AStarSolver = initalState => {
   var result = astar.execute();
   return translateFromLetterIntoNums(result.path.split(''));
 };
-const idsSolver = initalState => {
+const idsSolver = (initalState, delta) => {
   let gridWidth = Math.sqrt(initalState.length);
 
   var init = convertState(initalState, gridWidth);
   var goal = createGoalState(gridWidth);
-  // TODO make the depth editable 
-  let iter = 10, depthstart = 30
-  var ids = new IDS(init, goal, 0, depthstart, iter);
+  var ids = new IDS(init, goal, 0, delta);
   var result = ids.execute();
   return translateFromLetterIntoNums(result.path.split(''));
 }
@@ -192,7 +193,8 @@ class GameFactory extends Component {
       n: n ? n : this.state ? this.state.n : 3,
       gameState: gameState.GAME_IDLE,
       algrthm: this.state ? this.state.algrthm : { name: 'A*' },
-      depth: 20
+      depth: this.state ? this.state.depth : 20,
+      delta: this.state ? this.state.delta : 1,
     };
   }
 
@@ -369,10 +371,10 @@ class GameFactory extends Component {
         moves = AStarSolver(this.state.numbers);
         break;
       case 'Depth':
-        moves = dfsSolver(this.state.numbers)
+        moves = dfsSolver(this.state.numbers, this.state.depth)
         break;
       case 'IDS':
-        moves = idsSolver(this.state.numbers)
+        moves = idsSolver(this.state.numbers, this.delta)
         break;
       case 'Greedy':
         moves = greedySolver(this.state.numbers)
@@ -421,6 +423,14 @@ class GameFactory extends Component {
       return;
     this.setState({ depth: d });
   };
+  setDelta = d => {
+    if (
+      this.state.gameState === gameState.GAME_SOLVING ||
+      this.state.gameState === gameState.GAME_PLAYING_SOLUTION
+    )
+      return;
+    this.setState({ delta: d });
+  };
   render() {
     return (
       <ValuesContext.Provider value={this.state}>
@@ -435,7 +445,8 @@ class GameFactory extends Component {
             changeN: this.changeN,
             solve: this.solve,
             changeAlgrthm: this.changeAlgrthm,
-            setDepth: this.setDepth
+            setDepth: this.setDepth,
+            setDelta: this.setDelta
           }}
         >
           {this.props.children}
