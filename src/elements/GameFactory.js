@@ -13,6 +13,7 @@ import DFS from '../Solvers/DFS'
 import IDS from '../Solvers/IDS'
 import BFS from '../Solvers/BFS'
 import Greedy from '../Solvers/Greedy'
+import SolverNode from '../Solvers/SolverNode'
 
 const NEW_GAME = '__new_game__';
 const RESET_GAME = '__reset_game__';
@@ -67,7 +68,6 @@ const genratePuzzle = (arr, event, nn1) => {
       return arr;
     } else {
       let genArr = genratePuzzle(shuffle(genrateArray(nn1, 1)), NEW_GAME, nn1);
-      console.log('genratePuzzle()' + genArr);
       return genArr;
     }
   } else {
@@ -111,7 +111,7 @@ const dfsSolver = initalState => {
   var init = convertState(initalState, gridWidth);
   var goal = createGoalState(gridWidth);
   // TODO make the max depth editable 
-  let maxDepth = 50
+  let maxDepth = 5
   var dfs = new DFS(init, goal, 0, maxDepth);
   var result = dfs.execute();
   return translateFromLetterIntoNums(result.path.split(''));
@@ -124,7 +124,7 @@ function createGoalState(n) {
   }
   array.push(0);
   while (array.length) array2D.push(array.splice(0, n));
-  return new Node(0, array2D, n - 1, n - 1, 0);
+  return new SolverNode(0, array2D, n - 1, n - 1, 0);
 }
 function convertState(array, n) {
   let array2D = [],
@@ -142,29 +142,7 @@ function convertState(array, n) {
   }
   console.table(array2D);
 
-  return new Node(0, array2D, emptyRow, emptyCol, 0);
-}
-function Node(value, state, emptyRow, emptyCol, depth) {
-  this.value = value;
-  this.state = state;
-  this.emptyCol = emptyCol;
-  this.emptyRow = emptyRow;
-  this.depth = depth;
-  this.strRepresentation = '';
-  this.path = '';
-
-  // String representation of the state in CSV format
-  for (var i = 0; i < state.length; i++) {
-    // We assume the state is a square
-    if (state[i].length != state.length) {
-
-      return false;
-    }
-
-    for (var j = 0; j < state[i].length; j++)
-      this.strRepresentation += state[i][j] + ',';
-  }
-  this.size = this.state.length;
+  return new SolverNode(0, array2D, emptyRow, emptyCol, 0);
 }
 const AStarSolver = initalState => {
   let gridWidth = Math.sqrt(initalState.length);

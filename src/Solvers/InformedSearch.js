@@ -3,12 +3,18 @@ import HashSet from 'hashset';
 import SolverNode from './SolverNode.js';
 
 function InformedSearch(initial, goal, empty) {
+    this.idCounter = 0;
     this.initial = initial;
     this.goal = goal;
     this.empty = empty;
     this.queue = new PriorityQueue({
         comparator: function (a, b) {
-            return a.value - b.value;
+            const newLocal = a.value - b.value;
+            if (newLocal == 0) {
+                //FIFO
+                return a.id - b.id;
+            }
+            return newLocal;
         }
     });
     this.queue.queue(initial);
@@ -17,7 +23,6 @@ function InformedSearch(initial, goal, empty) {
 
 InformedSearch.prototype.execute = function () {
     // Add current state to visited list
-    console.log(this);
     let maxDepth = 0;
     let maxValue = 0;
     this.visited.add(this.initial.strRepresentation);
@@ -71,7 +76,7 @@ InformedSearch.prototype.expandInDir = function (rd, cd, pd, node) {
     newState[row + rd][col + cd] = this.empty;
     newState[row][col] = temp;
 
-    let newNode = new SolverNode(0, newState, row + rd, col + cd, node.depth + 1);
+    let newNode = new SolverNode(0, newState, row + rd, col + cd, node.depth + 1, this.idCounter++);
     if (!this.visited.contains(newNode.strRepresentation)) {
         newNode.value = this.getValue(newNode);
         newNode.path = node.path + pd;
@@ -84,5 +89,7 @@ InformedSearch.prototype.getValue = function (node) {
     throw new Error("Can't call abstract function");
 }
 
-
+Array.prototype.clone = function() {
+    return JSON.parse(JSON.stringify(this));
+  };
 export default InformedSearch;

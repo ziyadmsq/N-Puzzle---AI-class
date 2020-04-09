@@ -1,5 +1,6 @@
 export default class SolverNode {
-    constructor(value, state, emptyRow, emptyCol, depth) {
+    constructor(value, state, emptyRow, emptyCol, depth,id) {
+      this.id = id;
       this.value = value;
       this.state = state;
       this.emptyCol = emptyCol;
