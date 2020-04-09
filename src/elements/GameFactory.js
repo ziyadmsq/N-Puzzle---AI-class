@@ -143,7 +143,7 @@ function convertState(array, n) {
       }
     }
   }
-  console.table(array2D);
+  // console.table(array2D);
 
   return new SolverNode(0, array2D, emptyRow, emptyCol, 0);
 }
@@ -374,7 +374,7 @@ class GameFactory extends Component {
         moves = dfsSolver(this.state.numbers, this.state.depth)
         break;
       case 'IDS':
-        moves = idsSolver(this.state.numbers, this.delta)
+        moves = idsSolver(this.state.numbers, this.state.delta)
         break;
       case 'Greedy':
         moves = greedySolver(this.state.numbers)
@@ -429,6 +429,8 @@ class GameFactory extends Component {
       this.state.gameState === gameState.GAME_PLAYING_SOLUTION
     )
       return;
+      console.log(d + " " + this.state.delta);
+      
     this.setState({ delta: d });
   };
   render() {
