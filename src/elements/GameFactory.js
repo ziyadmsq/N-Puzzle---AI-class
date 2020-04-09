@@ -191,7 +191,7 @@ class GameFactory extends Component {
       seconds: 0,
       n: n ? n : this.state ? this.state.n : 3,
       gameState: gameState.GAME_IDLE,
-      algrthm: { name: 'A*' },
+      algrthm: this.state ? this.state.algrthm : { name: 'A*' },
       depth: 20
     };
   }
@@ -445,7 +445,7 @@ class GameFactory extends Component {
   }
 }
 
-export {isSolvable};
+export { isSolvable };
 export const GameFactoryConsumer = ({ children }) => {
   return (
     <ValuesContext.Consumer>
