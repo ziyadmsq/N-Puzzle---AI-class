@@ -1,5 +1,4 @@
 import DFS from './DFS';
-// log = console.log;
 function IDS(initial, goal, empty, delta) {
   this.initial = initial;
   this.goal = goal;
@@ -13,9 +12,9 @@ IDS.prototype.execute = function () {
     let dfs = new DFS(this.initial, this.goal, this.empty, i);
     i += this.delta;
     let res = dfs.execute();
-    console.log(res);
-
-    if (res)
+    console.log(res.path);
+    
+    if (res.path)
       return res;
   }
 }

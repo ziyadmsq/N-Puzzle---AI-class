@@ -302,14 +302,16 @@ class GameFactory extends Component {
     this.setState({ gameState: gameState.GAME_SOLVING }, () => {
 
       setTimeout(() => {
-        let moves = this.getMoves();
-
-        this.playSolution(moves);
+        let solution = this.getSolution();
+        this.setState({
+          ...solution
+        });
+        this.playSolution(translateFromLetterIntoNums(solution.path.split('')));
       }, 100);
     });
   };
 
-  getMoves() {
+  getSolution() {
     let init = convertState(this.state.numbers, this.state.n);
     let goal = createGoalState(this.state.n);
 
@@ -332,8 +334,10 @@ class GameFactory extends Component {
         break;
     }
     var result = solver.execute();
+    // console.log(result);
+    
     if (result)
-      return translateFromLetterIntoNums(result.path.split(''));
+      return result;
     else {
       return [];
     }
@@ -385,7 +389,6 @@ class GameFactory extends Component {
       this.state.gameState === gameState.GAME_PLAYING_SOLUTION
     )
       return;
-    console.log(d + " " + this.state.delta);
 
     this.setState({ delta: d });
   };

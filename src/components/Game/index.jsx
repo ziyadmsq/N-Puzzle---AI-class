@@ -44,7 +44,7 @@ export default class Game extends Component {
 
   onNewGameButton = () => {
     let x = prompt("Enter customized n-puzzle.Enter numbers seprated by space"
-    +"\nand for the empty block Enter 0 for example: \"1 0 2 3 5 4 7 6 8 \"\nLeave it empty for random puzzle")
+      + "\nand for the empty block Enter 0 for example: \"1 0 2 3 5 4 7 6 8 \"\nLeave it empty for random puzzle")
     if (x == "")
       this.props.resetGame()
     else if (x == null) { }
@@ -54,13 +54,13 @@ export default class Game extends Component {
       for (let i = 0; i < x.length; i++) {
         x[i] = parseInt(x[i])
       }
-      if(this.isSquare(x.length))
+      if (this.isSquare(x.length))
         if (isSolvable(x))
           this.props.resetGame(x)
-          else {
-            alert("Not solvable input")
-            this.onNewGameButton()
-          }
+        else {
+          alert("Not solvable input")
+          this.onNewGameButton()
+        }
       else {
         alert("Not solvable input")
         this.onNewGameButton()
@@ -93,9 +93,15 @@ export default class Game extends Component {
           </PlayPauseContainer>
           <Modal on={this.props.gameState === gameState.GAME_OVER}>
             <ModalContainer>
-              <div className="text-1">Excellent!</div>
-              <div>
-                It took you <b>{this.props.moves} moves</b>
+              <div style={{ gridTemplateColumns: "auto auto", display: "grid", justifyItems: "left", columnGap: "20px" }}>
+                Solution found at depth: <b>{this.props.depth}</b>
+              Number of expanded nodes:<b>{this.props.numberOfExpandedNodes}</b>
+              Number of nodes dropped by closed list: <b>{this.props.numberOfNodesDroppedByVisit}</b>
+              Number of times goal test was excuted: <b>{this.props.numberOfGoalTests} </b>
+              Max number of nodes stored in memory: <b>{this.props.maxSize} </b>
+              Number of nodes stored in closed list: <b>{this.props.visitedSize} </b>
+              Max number of nodes stored in fringe: <b>{this.props.maxQueueSize} </b>
+              Solution Found in <b>{this.props.totalTime}ms </b>
               </div>
               <div>
                 <Button
@@ -132,7 +138,7 @@ export default class Game extends Component {
             {this.props.gameState === gameState.Game_Solving ? 'Solving' : 'Solve'}
           </Button>
         </MovmentPanel>
-      </div>
+      </div >
     );
   }
 }
