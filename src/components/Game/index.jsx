@@ -92,7 +92,8 @@ export default class Game extends Component {
 
           </PlayPauseContainer>
           <Modal on={this.props.gameState === gameState.GAME_OVER}>
-            <ModalContainer>
+            <ModalContainer style={{padding:'12px'}}>
+            <div className="text-1">Done!</div>
               <div style={{ gridTemplateColumns: "auto auto", display: "grid", justifyItems: "left", columnGap: "20px" }}>
                 Solution found at depth: <b>{this.props.depth}</b>
               Number of expanded nodes:<b>{this.props.numberOfExpandedNodes}</b>
@@ -107,6 +108,7 @@ export default class Game extends Component {
                 <Button
                   type="big"
                   textColor="black"
+                  style={{marginTop:'12px'}}
                   onClick={this.onNewGameButton}
                 >
                   Play Again
