@@ -81,6 +81,11 @@ export default class Game extends Component {
       let result = this.props.getSolutionBatch(algorithms[i].value,depth,delta)
       x+= `\n ${algorithms[i].value}, ${result.depth}, ${result.numberOfExpandedNodes}, ${result.numberOfNodesDroppedByVisit}, ${result.numberOfGoalTests}, ${result.maxSize}, ${result.visitedSize}, ${result.maxQueueSize}, ${result.totalTime}`
     }
+    x+=`\n initial state`
+    console.log(this.props.numbers+ " ");
+    console.log(this.props.numbers+ " ");
+    
+    x+= `\n${(this.props.numbers + "").replace(/,/g, ' ')}`
     download("Batch.csv", x)
   }
 
