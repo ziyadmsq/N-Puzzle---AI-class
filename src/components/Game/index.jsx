@@ -12,6 +12,7 @@ import Score from '../Score';
 import Grid from '../Grid';
 import { isSolvable } from '../../elements/GameFactory.js';
 import { gameState } from '@Utils';
+import download from '../../utils/download.js'
 
 const algorithms = [
   { value: 'A*', label: 'A*' },
@@ -67,6 +68,17 @@ export default class Game extends Component {
       }
     }
   }
+  generateBatch = () => {
+    let depth = prompt("Enter depth for depth first search")
+    let delta = prompt("Enter delta for IDS")
+    let x = "Algorithm, Solution depth , Number of expanded nodes,  Number of nodes dropped by closed list, Number of times goal test was excuted , Max number of nodes stored in memory, Number of nodes stored in closed list, Max number of nodes stored in fringe , Solution Found in"
+    for (let i = 0; i < algorithms.length; i++) {
+      let result = this.props.getSolutionBatch(algorithms[i].value,depth,delta)
+      x+= `\n ${algorithms[i].value}, ${result.depth}, ${result.numberOfExpandedNodes}, ${result.numberOfNodesDroppedByVisit}, ${result.numberOfGoalTests}, ${result.maxSize}, ${result.visitedSize}, ${result.maxQueueSize}, ${result.totalTime}`
+    }
+    download("Batch.csv", x)
+  }
+
 
   render() {
     return (
@@ -92,8 +104,8 @@ export default class Game extends Component {
 
           </PlayPauseContainer>
           <Modal on={this.props.gameState === gameState.GAME_OVER}>
-            <ModalContainer style={{padding:'12px'}}>
-            <div className="text-1">Done!</div>
+            <ModalContainer style={{ padding: '12px' }}>
+              <div className="text-1">Done!</div>
               <div style={{ gridTemplateColumns: "auto auto", display: "grid", justifyItems: "left", columnGap: "20px" }}>
                 Solution found at depth: <b>{this.props.depth}</b>
               Number of expanded nodes:<b>{this.props.numberOfExpandedNodes}</b>
@@ -108,7 +120,7 @@ export default class Game extends Component {
                 <Button
                   type="big"
                   textColor="black"
-                  style={{marginTop:'12px'}}
+                  style={{ marginTop: '12px' }}
                   onClick={this.onNewGameButton}
                 >
                   Play Again
@@ -139,6 +151,14 @@ export default class Game extends Component {
           >
             {this.props.gameState === gameState.Game_Solving ? 'Solving' : 'Solve'}
           </Button>
+          <Button
+            type="big"
+            textColor="black"
+            style={{ marginTop: '12px' }}
+            onClick={this.generateBatch}
+          >
+            Batch
+        </Button>
         </MovmentPanel>
       </div >
     );

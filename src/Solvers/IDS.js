@@ -11,9 +11,7 @@ IDS.prototype.execute = function () {
   while (true) {    
     let dfs = new DFS(this.initial, this.goal, this.empty, i);
     i += this.delta;
-    let res = dfs.execute();
-    console.log(res.path);
-    
+    let res = dfs.execute();    
     if (res.path)
       return res;
   }
