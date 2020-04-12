@@ -20,6 +20,7 @@ const algorithms = [
   { value: 'Depth', label: 'Depth' },
   { value: 'DepthCustom', label: 'DepthCustom' },
   { value: 'IDS', label: 'IDS' },
+  { value: 'CustomIDS', label: 'CustomIDS' },
 ];//TODO move somewhere
 
 export default class Game extends Component {

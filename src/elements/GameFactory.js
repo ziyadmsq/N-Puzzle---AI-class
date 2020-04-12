@@ -332,7 +332,10 @@ class GameFactory extends Component {
         solver = new DFSCustomVisitList(init, goal, 0, this.state.maxDepth);
         break;
       case 'IDS':
-        solver = new IDS(init, goal, 0, this.state.delta);
+        solver = new IDS(init, goal, 0, this.state.delta,false);
+        break;
+      case 'CustomIDS':
+        solver = new IDS(init, goal, 0, this.state.delta, true);
         break;
       case 'Greedy':
         solver = new Greedy(init, goal, 0);
@@ -340,7 +343,7 @@ class GameFactory extends Component {
     }
     var result = solver.execute();
     // console.log(result);
-    
+
     if (result)
       return result;
     else {
@@ -391,7 +394,7 @@ class GameFactory extends Component {
   setPlayTime = d => {
     this.setState({ playTime: d });
   };
-  
+
   setDelta = d => {
     if (
       this.state.gameState === gameState.GAME_SOLVING ||
