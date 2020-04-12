@@ -143,7 +143,7 @@ class GameFactory extends Component {
       n: n ? n : this.state ? this.state.n : 3,
       gameState: gameState.GAME_IDLE,
       algrthm: this.state ? this.state.algrthm : { name: 'A*' },
-      depth: this.state ? this.state.depth : 20,
+      maxDepth: this.state ? this.state.maxDepth : 20,
       delta: this.state ? this.state.delta : 1,
     };
   }
@@ -324,7 +324,7 @@ class GameFactory extends Component {
         solver = new AStar(init, goal, 0);
         break;
       case 'Depth':
-        solver = new DFS(init, goal, 0, this.state.depth);
+        solver = new DFS(init, goal, 0, this.state.maxDepth);
         break;
       case 'IDS':
         solver = new IDS(init, goal, 0, this.state.delta);
@@ -381,7 +381,7 @@ class GameFactory extends Component {
       this.state.gameState === gameState.GAME_PLAYING_SOLUTION
     )
       return;
-    this.setState({ depth: d });
+    this.setState({ maxDepth: d });
   };
   setDelta = d => {
     if (
