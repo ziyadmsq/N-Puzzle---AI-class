@@ -10,6 +10,7 @@ import {
 } from '@Utils';
 import AStar from '../Solvers/AStar';
 import DFS from '../Solvers/DFS'
+import DFSCustomVisitList from '../Solvers/DFSCustom'
 import IDS from '../Solvers/IDS'
 import BFS from '../Solvers/BFS'
 import Greedy from '../Solvers/Greedy'
@@ -147,6 +148,7 @@ class GameFactory extends Component {
       algrthm: this.state ? this.state.algrthm : { name: 'A*' },
       maxDepth: this.state ? this.state.maxDepth : 20,
       delta: this.state ? this.state.delta : 1,
+      playTime: this.state ? this.state.playTime : 500,
     };
   }
 
@@ -328,6 +330,9 @@ class GameFactory extends Component {
       case 'Depth':
         solver = new DFS(init, goal, 0, this.state.maxDepth);
         break;
+      case 'DepthCustom':
+        solver = new DFSCustomVisitList(init, goal, 0, this.state.maxDepth);
+        break;
       case 'IDS':
         solver = new IDS(init, goal, 0, this.state.delta);
         break;
@@ -390,7 +395,7 @@ class GameFactory extends Component {
           move(location, row, col, m[i], n);
           i++;
         },
-        150,
+        this.state.playTime,
         moves,
         this.state.n,
         this.gettingEmptyBoxLocation,
@@ -416,6 +421,10 @@ class GameFactory extends Component {
       return;
     this.setState({ maxDepth: d });
   };
+  setPlayTime = d => {
+    this.setState({ playTime: d });
+  };
+  
   setDelta = d => {
     if (
       this.state.gameState === gameState.GAME_SOLVING ||
@@ -441,7 +450,8 @@ class GameFactory extends Component {
             changeAlgrthm: this.changeAlgrthm,
             setDepth: this.setDepth,
             setDelta: this.setDelta,
-            getSolutionBatch: this.getSolutionBatch
+            getSolutionBatch: this.getSolutionBatch,
+            setPlayTime: this.setPlayTime,
           }}
         >
           {this.props.children}

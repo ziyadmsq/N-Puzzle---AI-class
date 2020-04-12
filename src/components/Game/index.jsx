@@ -19,6 +19,7 @@ const algorithms = [
   { value: 'Greedy', label: 'Greedy' },
   { value: 'Breadth', label: 'Breadth' },
   { value: 'Depth', label: 'Depth' },
+  { value: 'DepthCustom', label: 'DepthCustom' },
   { value: 'IDS', label: 'IDS' },
 ];//TODO move somewhere
 
@@ -41,6 +42,7 @@ export default class Game extends Component {
 
   setDepth = (e) => this.props.setDepth(e.target.value);
   setDelta = (e) => this.props.setDelta(e.target.value);
+  setPlayTime = (e) => this.props.setPlayTime(e.target.value);
   isSquare = (n) => n > 0 && Math.sqrt(n) % 1 === 0;
 
   onNewGameButton = () => {
@@ -72,6 +74,8 @@ export default class Game extends Component {
     let depth = prompt("Enter depth for depth first search")
     let delta = prompt("Enter delta for IDS")
     let x = "Algorithm, Solution depth , Number of expanded nodes,  Number of nodes dropped by closed list, Number of times goal test was excuted , Max number of nodes stored in memory, Number of nodes stored in closed list, Max number of nodes stored in fringe , Solution Found in"
+    if(depth ===""|| depth === null ||delta ===""|| delta === null)
+      return
     for (let i = 0; i < algorithms.length; i++) {
       let result = this.props.getSolutionBatch(algorithms[i].value,depth,delta)
       x+= `\n ${algorithms[i].value}, ${result.depth}, ${result.numberOfExpandedNodes}, ${result.numberOfNodesDroppedByVisit}, ${result.numberOfGoalTests}, ${result.maxSize}, ${result.visitedSize}, ${result.maxQueueSize}, ${result.totalTime}`
@@ -136,7 +140,7 @@ export default class Game extends Component {
             defaultValue={algorithms[0]}
             onChange={this.algorithmChange}
           />
-          <div hidden={this.props.algrthm.name !== "Depth"}>
+          <div hidden={!this.props.algrthm.name.includes("Depth")}>
             <label style={{ color: "#000", fontSize: 22 }}> Max Depth </label>
             <input className="input" type="number" defaultValue="20" onChange={this.setDepth} />
           </div>
@@ -144,6 +148,8 @@ export default class Game extends Component {
             <label style={{ color: "#000", fontSize: 22 }}> Delta </label>
             <input className="input" type="number" defaultValue="1" onChange={this.setDelta} />
           </div>
+          <label style={{ color: "#000", fontSize: 22 }}> Playback delay </label>
+          <input className="input" type="number" defaultValue="500" min={20} onChange={this.setPlayTime} />
           <Button
             onClick={this.props.solve}
             disabled={this.props.gameState === gameState.Game_Solving}
