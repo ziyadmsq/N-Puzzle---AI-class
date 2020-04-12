@@ -357,7 +357,7 @@ class GameFactory extends Component {
     let goal = createGoalState(this.state.n);
 
     let solver = {};
-    switch (this.state.algrthm.name) {
+    switch (algrthm) {
       case 'Breadth':
         solver = new BFS(init, goal, 0);
         break;
@@ -365,16 +365,16 @@ class GameFactory extends Component {
         solver = new AStar(init, goal, 0);
         break;
       case 'Depth':
-        solver = new DFS(init, goal, 0, this.state.maxDepth);
+        solver = new DFS(init, goal, 0, depth);
         break;
       case 'DepthCustom':
-        solver = new DFSCustomVisitList(init, goal, 0, this.state.maxDepth);
+        solver = new DFSCustomVisitList(init, goal, 0, depth);
         break;
       case 'IDS':
-        solver = new IDS(init, goal, 0, this.state.delta,false);
+        solver = new IDS(init, goal, 0, delta,false);
         break;
       case 'CustomIDS':
-        solver = new IDS(init, goal, 0, this.state.delta, true);
+        solver = new IDS(init, goal, 0, delta, true);
         break;
       case 'Greedy':
         solver = new Greedy(init, goal, 0);

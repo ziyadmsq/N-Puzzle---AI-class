@@ -38,7 +38,7 @@ InformedSearch.prototype.execute = function () {
 
         numberOfGoalTests++;
         if (current.strRepresentation === this.goal.strRepresentation)
-            {console.log(this.visited);
+            {
             return {
                 path: current.path,
                 depth: current.depth,
