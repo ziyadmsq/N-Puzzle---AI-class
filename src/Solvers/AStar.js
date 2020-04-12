@@ -6,6 +6,6 @@ const AStar = function (initial, goal, empty) {
 AStar.prototype = Object.create(InformedSearch.prototype)
 
 AStar.prototype.getValue = (node) => {
-  return node.depth + manhattanDistance(node);
+  return node.depth * 2 + manhattanDistance(node);
 }
 export default AStar;

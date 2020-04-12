@@ -9,7 +9,7 @@ const manhattanDistance = (node) => {
             let targetCol = (elem - 1) % node.state.length;
             // console.log(elem + " " + targetRow + " " + targetCol + " " + Math.abs(i - targetRow) + Math.abs(j - targetCol));
 
-            result += Math.abs(j - targetRow) + Math.abs(i - targetCol);
+            result += Math.abs(i - targetRow) + Math.abs(j - targetCol);
         }
     }
     // console.table(node.state);
