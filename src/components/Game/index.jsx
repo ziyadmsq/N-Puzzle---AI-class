@@ -77,6 +77,8 @@ export default class Game extends Component {
     let x = "Algorithm, Solution depth , Number of expanded nodes,  Number of nodes dropped by closed list, Number of times goal test was excuted , Max number of nodes stored in memory, Number of nodes stored in closed list, Max number of nodes stored in fringe , Solution Found in"
     if(depth ===""|| depth === null ||delta ===""|| delta === null)
       return
+    depth = parseInt(depth);
+    delta = parseInt(delta);
     for (let i = 0; i < algorithms.length; i++) {
       let result = this.props.getSolutionBatch(algorithms[i].value,depth,delta)
       x+= `\n ${algorithms[i].value}, ${result.depth}, ${result.numberOfExpandedNodes}, ${result.numberOfNodesDroppedByVisit}, ${result.numberOfGoalTests}, ${result.maxSize}, ${result.visitedSize}, ${result.maxQueueSize}, ${result.totalTime}`
